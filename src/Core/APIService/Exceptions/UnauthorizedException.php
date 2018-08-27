@@ -1,0 +1,19 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Oarga-Tamas
+ * Date: 2018. 08. 09.
+ * Time: 9:04
+ */
+
+namespace MedevSuite\Core\APIService\Exceptions;
+
+
+class UnauthorizedException extends APIException
+{
+    public function __construct()
+    {
+        parent::__construct("Unauthorized", 401);
+    }
+
+}
