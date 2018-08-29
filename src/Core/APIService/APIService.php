@@ -11,6 +11,7 @@ namespace MedevSlim\Core\APIService;
 
 use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
 use Slim\App;
+use Slim\Interfaces\RouteGroupInterface;
 use Slim\RouteGroup;
 
 abstract class APIService
@@ -26,16 +27,13 @@ abstract class APIService
 
     public function register(App $app, $baseUrl = "/")
     {
-        $group = $app->group($baseUrl, function () {
-            $this->registerRoutes($this);
-        })->setName($this->getServiceName());
-
+        $group = $app->group($baseUrl, function () use ($app) {
+            $this->registerRoutes($app);
+        });
         $this->registerMiddlewares($group);
     }
 
-    protected abstract function getServiceName();
+    protected abstract function registerRoutes(App $app);
 
-    protected abstract function registerRoutes(RouteGroup $group);
-
-    protected abstract function registerMiddlewares(RouteGroup $group);
+    protected abstract function registerMiddlewares(RouteGroupInterface $group);
 }
