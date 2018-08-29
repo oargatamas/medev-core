@@ -6,8 +6,11 @@
  * Time: 9:42
  */
 
-namespace MedevSuite\Core\APIAction\Middleware;
+namespace MedevSlim\Core\APIAction\Middleware;
 
+
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class ScopeValidator
 {
@@ -16,11 +19,11 @@ class ScopeValidator
 
     public function __construct(array $requiredScopes = null)
     {
-        $this->$requiredScopes = $requiredScopes;
+        $this->requiredScopes = $requiredScopes;
     }
 
 
-    public function __invoke($request, $response, $next)
+    public function __invoke(Request $request,Response $response,callable $next)
     {
         $response->getBody()->write('BEFORE ScopeValidator');
         $response = $next($request, $response);

@@ -6,7 +6,7 @@
  * Time: 9:10
  */
 
-namespace MedevSuite\Core\APIService\Exceptions;
+namespace MedevSlim\Core\APIService\Exceptions;
 
 
 

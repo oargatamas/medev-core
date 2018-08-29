@@ -6,12 +6,15 @@
  * Time: 9:31
  */
 
-namespace MedevSuite\Core\ErrorHandlers;
+namespace MedevSlim\Core\ErrorHandlers;
 
+
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class NotAllowedHandler
 {
-    public function __invoke($request, $response, $methods) {
+    public function __invoke(Request $request,Response $response, $methods) {
         return $response
             ->withStatus(405)
             ->withHeader('Content-Type', 'application/json')

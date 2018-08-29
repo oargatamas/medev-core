@@ -6,11 +6,11 @@
  * Time: 15:22
  */
 
-namespace MedevSuite\Core\ErrorHandlers;
+namespace MedevSlim\Core\ErrorHandlers;
 
 
 
-use MedevSuite\Core\APIService\Exceptions\APIException;
+use MedevSlim\Core\APIService\Exceptions\APIException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;

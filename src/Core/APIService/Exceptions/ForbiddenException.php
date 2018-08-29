@@ -6,7 +6,7 @@
  * Time: 9:08
  */
 
-namespace MedevSuite\Core\APIService\Exceptions;
+namespace MedevSlim\Core\APIService\Exceptions;
 
 
 class ForbiddenException extends APIException

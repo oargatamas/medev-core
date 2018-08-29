@@ -6,12 +6,15 @@
  * Time: 9:30
  */
 
-namespace MedevSuite\Core\ErrorHandlers;
+namespace MedevSlim\Core\ErrorHandlers;
 
+
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class NotFoundHandler
 {
-    public function __invoke($request, $response) {
+    public function __invoke(Request $request,Response $response) {
         return $response
             ->withStatus(404)
             ->withHeader('Content-Type', 'application/json')

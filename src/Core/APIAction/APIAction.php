@@ -6,10 +6,10 @@
  * Time: 14:30
  */
 
-namespace MedevSuite\Core\APIAction;
+namespace MedevSlim\Core\APIAction;
 
 
-use MedevSuite\Core\APIService\Exceptions\UnauthorizedException;
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;

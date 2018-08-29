@@ -6,7 +6,7 @@
  * Time: 16:04
  */
 
-namespace MedevSuite\Core\APIService\Interfaces;
+namespace MedevSlim\Core\APIService\Interfaces;
 
 
 interface ServiceConfiguration

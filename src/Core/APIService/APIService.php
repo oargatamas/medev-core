@@ -6,10 +6,10 @@
  * Time: 15:38
  */
 
-namespace MedevSuite\Core\APIService;
+namespace MedevSlim\Core\APIService;
 
 
-use MedevSuite\Core\APIService\Interfaces\ServiceConfiguration;
+use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
 use Slim\App;
 
 abstract class APIService

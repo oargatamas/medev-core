@@ -6,7 +6,7 @@
  * Time: 16:19
  */
 
-namespace MedevSuite\Utils\UUID;
+namespace MedevSlim\Utils\UUID;
 
 
 class UUID
