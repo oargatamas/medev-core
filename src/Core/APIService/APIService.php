@@ -35,7 +35,7 @@ abstract class APIService
 
     protected abstract function getServiceName();
 
-    protected abstract function registerRoutes(App $app);
+    protected abstract function registerRoutes(RouteGroup $group);
 
     protected abstract function registerMiddlewares(RouteGroup $group);
 }
