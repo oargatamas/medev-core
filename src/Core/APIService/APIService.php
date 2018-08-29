@@ -33,10 +33,10 @@ abstract class APIService
         $group = $app->group($baseUrl, function()use ($app,$container,$service){
             $service->registerRoutes($app,$container);
         });
-        $this->registerMiddlewares($group);
+        $this->registerMiddlewares($group,$container);
     }
 
     protected abstract function registerRoutes(App $app,ContainerInterface $container);
 
-    protected abstract function registerMiddlewares(RouteGroupInterface $group);
+    protected abstract function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container);
 }
