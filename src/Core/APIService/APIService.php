@@ -25,11 +25,11 @@ abstract class APIService
     }
 
 
-    public function register(App $app,$baseUrl = "/"){
+    public function register(App $app, $baseUrl = "/"){
         $this->registerRoutes($app,$baseUrl);
         $this->registerMiddlewares($app);
     }
 
-    protected abstract function registerRoutes(App $app);
+    protected abstract function registerRoutes(App $app, $baseUrl);
     protected abstract function registerMiddlewares(App $app);
 }
