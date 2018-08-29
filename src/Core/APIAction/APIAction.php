@@ -28,7 +28,7 @@ abstract class APIAction
 
     public function handleRequest(Request $request,Response $response, $args)
     {
-        if ($this->hasPermission(["lofasz"])) {
+        if ($this->hasPermission($request->getAttribute("scopes"))) {
             return $this->executeLogic($request, $response, $args);
         } else {
             throw new UnauthorizedException();

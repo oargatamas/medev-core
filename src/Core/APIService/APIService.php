@@ -16,8 +16,6 @@ abstract class APIService
 {
 
     protected $config;
-    protected $requires_authentication;
-
 
     public function __construct(ServiceConfiguration $config = null)
     {
@@ -27,10 +25,16 @@ abstract class APIService
 
     public function register(App $app, $baseUrl = "/")
     {
-        $app->group($baseUrl, $this->registerRoutes())->add($this->registerMiddlewares($app));
+        $group = $app->group($baseUrl, function () {
+            $this->registerRoutes($this);
+        })->setName($this->getServiceName());
+
+        $this->registerMiddlewares($group);
     }
 
-    protected abstract function registerRoutes();
+    protected abstract function getServiceName();
+
+    protected abstract function registerRoutes(App $app);
 
     protected abstract function registerMiddlewares(App $app);
 }
