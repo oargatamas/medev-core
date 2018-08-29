@@ -27,8 +27,9 @@ abstract class APIService
 
     public function register(App $app, $baseUrl = "/")
     {
-        $group = $app->group($baseUrl, function () use ($app) {
-            $this->registerRoutes($app);
+        $service = $this;
+        $group = $app->group($baseUrl, function()use ($app,$service){
+            $service->registerRoutes($app);
         });
         $this->registerMiddlewares($group);
     }
