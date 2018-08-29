@@ -15,10 +15,10 @@ use Slim\Http\Response;
 class PHPRuntimeHandler
 {
     public function __invoke(Request $request, Response $response, $exception) {
-      
+
         return $response
             ->withStatus(500)
             ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode("Something went wrong:"));
+            ->write(json_encode("Something went wrong."));
     }
 }
