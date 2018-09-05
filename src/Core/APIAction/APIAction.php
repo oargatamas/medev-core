@@ -11,6 +11,7 @@ namespace MedevSlim\Core\APIAction;
 
 use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Psr\Container\ContainerInterface;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -29,13 +30,13 @@ abstract class APIAction
     public function __invoke(Request $request,Response $response, $args)
     {
         if ($this->hasPermission($request->getAttribute("scopes"))) {
-            return $this->executeLogic($request, $response, $args);
+            return $this->onPermissionGranted($request, $response, $args);
         } else {
             throw new UnauthorizedException();
         }
     }
 
-    //Todo consider to move logic into a middleware instead of checking it here
+
     private function hasPermission($permissionsFromClient)
     {
         if (empty($this->permissions)) { //If we did not set any permission, then we are Authorised! :)
@@ -54,5 +55,5 @@ abstract class APIAction
         return false;
     }
 
-    protected abstract function executeLogic(Request $request,Response $response, $args);
+    protected abstract function onPermissionGranted(Request $request,Response $response, $args);
 }

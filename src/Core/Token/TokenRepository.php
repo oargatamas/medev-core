@@ -9,15 +9,13 @@
 namespace MedevSuite\Application\Auth\OAuth\Token;
 
 
-interface TokenProvider
+interface TokenRepository
 {
-    public function getToken($customClaims = []);
+    public function generateToken($args = []);
 
     public function persistToken($token);
 
     public function revokeToken($tokenId);
 
     public function validateToken($token);
-
-    public function getTokenId();
 }

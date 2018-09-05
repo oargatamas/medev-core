@@ -15,7 +15,8 @@ use Lcobucci\JWT\Token\Parser;
 use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use MedevSlim\Core\Token\JWT\JWS\JWSConfiguration;
 use MedevSlim\Core\Token\JWT\JWS\JWSValidator;
-use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSProvider;
+use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWS;
+use MedevSuite\Application\Auth\OAuth\Token\JWT\JWS\JWSRepository;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -23,11 +24,11 @@ use Slim\Http\Response;
 
 class JWSRequestValidator
 {
-    private $jwsValidator;
+    private $jwsRepo;
 
-    public function __construct(JWSValidator $jwsValidator)
+    public function __construct(JWSRepository $jwsRepository)
     {
-        $this->jwsValidator = $jwsValidator;
+        $this->jwsRepo = $jwsRepository;
     }
 
 
@@ -43,7 +44,7 @@ class JWSRequestValidator
 
             $jws = (new Parser())->parse($tokenString);
 
-            if(!$this->jwsValidator->isSignatureValid($jws)){
+            if(!$this->jwsRepo->verifySignature($jws)){
                 throw new Exception("Invalid token signature");
             }
 

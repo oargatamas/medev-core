@@ -27,17 +27,15 @@ class GrantAccess extends APIAction
     }
 
 
-    protected function executeLogic(Request $request, Response $response, $args)
+    protected function onPermissionGranted(Request $request, Response $response, $args)
     {
-        if(!$request->get("grant_type")){
+        $body = $request->getParsedBody();
+
+        if(isset($body["grant_type"]) && $this->authService->hasGrantType($body["grant_type"])){
+            $handler = $this->authService->getGrantType($body["grant_type"]);
+            return $handler($request,$response,$args);
+        }else{
             throw new ForbiddenException();
         }
-
-        if(!$this->authService->hasGrantType($request->getHeader("grant_type"))){
-            throw new ForbiddenException();
-        }
-
-        $handler = $this->authService->getGrantType($request->getHeader("grant_type"));
-        return $handler($request,$response,$args);
     }
 }

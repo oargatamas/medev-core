@@ -18,18 +18,20 @@ use Slim\RouteGroup;
 abstract class APIService
 {
 
-    protected $config;
+    protected $application;
 
-    public function __construct(ServiceConfiguration $config = null)
+    public function __construct(App $app)
     {
-        $this->config = $config;
+        $this->application = $app;
     }
 
 
-    public function register(App $app, $baseUrl = "/")
+    public function register($baseUrl = "/")
     {
         $service = $this;
+        $app = $this->application;
         $container = $app->getContainer();
+
         $group = $app->group($baseUrl, function()use ($app,$container,$service){
             $service->registerRoutes($app,$container);
         });
@@ -39,4 +41,5 @@ abstract class APIService
     protected abstract function registerRoutes(App $app,ContainerInterface $container);
 
     protected abstract function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container);
+
 }

@@ -9,19 +9,20 @@
 namespace MedevSlim\Core\Repository;
 
 
+use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
+use Slim\Container;
 
 class ApplicationRepository
 {
-    private $db;
+    protected $db;
 
-    /**
-     * ApplicationRepository constructor.
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Container $container)
     {
         $this->db = $container->get("database");
     }
 
-
+    public function getDatabase(){
+        return $this->db;
+    }
 }
