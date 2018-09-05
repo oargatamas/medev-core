@@ -16,10 +16,11 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use MedevSlim\Core\Repository\ApplicationRepository;
 use MedevSlim\Core\Token\JWT\JWS\JWSConfiguration;
+use MedevSuite\Application\Auth\OAuth\Token\TokenRepository;
 use Medoo\Medoo;
 use Slim\Container;
 
-abstract class JWSRepository extends ApplicationRepository
+abstract class JWSRepository extends ApplicationRepository implements TokenRepository
 {
     /**
      * @var JWSConfiguration
