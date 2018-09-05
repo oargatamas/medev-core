@@ -27,8 +27,8 @@ abstract class JWSRepository implements TokenRepository
 
     public function __construct(Container $container, JWSConfiguration $config)
     {
-       $this->config = $config;
-       parent::__construct($container);
+        $this->config = $config;
+        parent::__construct($container);
     }
 
     public function generateToken($args = [])
@@ -36,17 +36,17 @@ abstract class JWSRepository implements TokenRepository
         $token = new Builder();
 
         //Setting public claims
-        $token->setHeader("jti",$this->config->getJTI());
-        $token->set("sub",$this->config->getSUB());
-        $token->set("iss",$this->config->getISS());
-        $token->set("aud",$this->config->getAUD());
-        $token->set("iat",$this->config->getIAT());
-        $token->set("exp",$this->config->getEXP());
-        $token->set("nbf",$this->config->getNBF());
+        $token->setHeader("jti", $this->config->getJTI());
+        $token->set("sub", $this->config->getSUB());
+        $token->set("iss", $this->config->getISS());
+        $token->set("aud", $this->config->getAUD());
+        $token->set("iat", $this->config->getIAT());
+        $token->set("exp", $this->config->getEXP());
+        $token->set("nbf", $this->config->getNBF());
 
         //Private claims will be set by the final implementation
-        foreach ($this->getPrivateClaims($args) as $key => $value){
-            $token->set($key,$value);
+        foreach ($this->getPrivateClaims($args) as $key => $value) {
+            $token->set($key, $value);
         }
 
         return $this->applySignature($token);
@@ -55,7 +55,8 @@ abstract class JWSRepository implements TokenRepository
     protected abstract function getPrivateClaims($args = []);
 
 
-    protected function applySignature(Builder $token){
+    protected function applySignature(Builder $token)
+    {
         $signer = new Sha256();
         $keychain = new Keychain();
 
@@ -67,29 +68,33 @@ abstract class JWSRepository implements TokenRepository
     }
 
 
-    public function deserialize($jwsString){
+    public function deserialize($jwsString)
+    {
         return (new Parser())->parse($jwsString);
     }
 
     public function validateToken($serializedToken)
     {
         $jws = $this->deserialize($serializedToken);
-        $this->verifySignature($jws);
-        $this->isTokenBlacklisted($jws);
+
+        if (!$this->verifySignature($jws)) {
+            throw new \Exception("Invalid token signature");
+        }
+
+        if (!$this->isTokenBlacklisted($jws->getHeader("jti"))) {
+            throw new \Exception("Token is blacklisted");
+        }
 
         return $jws;
     }
 
-    public function verifySignature(Token $jws){
+    public function verifySignature(Token $jws)
+    {
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        if($jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()))){
-            return $jws;
-        }else{
-            throw new \Exception("Invalid token signature");
-        }
+        return $jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
     }
 
-    public abstract function isTokenBlacklisted(Token $jws);
+    public abstract function isTokenBlacklisted($tokenID);
 }
