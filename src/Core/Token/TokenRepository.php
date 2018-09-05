@@ -17,5 +17,5 @@ interface TokenRepository
 
     public function revokeToken($tokenId);
 
-    public function validateToken($token);
+    public function validateToken($serializedToken);
 }

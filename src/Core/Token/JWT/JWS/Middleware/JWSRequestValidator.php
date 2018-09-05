@@ -42,17 +42,14 @@ class JWSRequestValidator
             $tokenString = substr($request->getHeader("Authorization"), strlen("Bearer "));
 
 
-            $jws = (new Parser())->parse($tokenString);
-
-            if(!$this->jwsRepo->verifySignature($jws)){
-                throw new Exception("Invalid token signature");
-            }
+            $jws = $this->jwsRepo->validateToken($tokenString);
 
             $request->withAttribute("token", $jws);
             $request->withAttribute("scopes", $jws->getClaim("scopes"));
 
             $response = $next($request, $response);
             return $response;
+
 
         } catch (\Exception $e) {
             //Todo log error message before printing out the response with 401

@@ -45,12 +45,14 @@ abstract class JWSRepository implements TokenRepository
         $token->set("nbf",$this->config->getNBF());
 
         //Private claims will be set by the final implementation
-        $this->setPrivateClaims($token,$args);
+        foreach ($this->getPrivateClaims($args) as $key => $value){
+            $token->set($key,$value);
+        }
 
         return $this->applySignature($token);
     }
 
-    protected abstract function setPrivateClaims(Builder $token, $args = []);
+    protected abstract function getPrivateClaims($args = []);
 
 
     protected function applySignature(Builder $token){
@@ -64,17 +66,30 @@ abstract class JWSRepository implements TokenRepository
         return $token;
     }
 
+
     public function deserialize($jwsString){
         return (new Parser())->parse($jwsString);
     }
 
+    public function validateToken($serializedToken)
+    {
+        $jws = $this->deserialize($serializedToken);
+        $this->verifySignature($jws);
+        $this->isTokenBlacklisted($jws);
+
+        return $jws;
+    }
 
     public function verifySignature(Token $jws){
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        return $jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
+        if($jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()))){
+            return $jws;
+        }else{
+            throw new \Exception("Invalid token signature");
+        }
     }
 
-
+    public abstract function isTokenBlacklisted(Token $jws);
 }
