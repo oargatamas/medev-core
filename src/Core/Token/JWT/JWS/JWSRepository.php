@@ -77,18 +77,18 @@ abstract class JWSRepository implements TokenRepository
     {
         $jws = $this->deserialize($serializedToken);
 
-        if (!$this->verifySignature($jws)) {
+        if (!$this->isSignatureValid($jws)) {
             throw new \Exception("Invalid token signature");
         }
 
-        if (!$this->isTokenBlacklisted($jws->getHeader("jti"))) {
+        if ($this->isTokenBlacklisted($jws->getHeader("jti"))) {
             throw new \Exception("Token is blacklisted");
         }
 
         return $jws;
     }
 
-    public function verifySignature(Token $jws)
+    public function isSignatureValid(Token $jws)
     {
         $signer = new Sha256();
         $keychain = new Keychain();
@@ -96,5 +96,5 @@ abstract class JWSRepository implements TokenRepository
         return $jws->verify($signer, $keychain->getPublicKey($this->config->getPublicKey()));
     }
 
-    public abstract function isTokenBlacklisted($tokenID);
+    public abstract function isTokenBlacklisted($tokenId);
 }

@@ -17,23 +17,19 @@ use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-abstract class GrantType extends APIAction
+abstract class GrantType
 {
 
     /**
      * @var TokenRepository
      */
-    protected $accessTokens;
+    protected $accessTokenRepository;
 
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container, []); //No permission needed.
-    }
 
     public abstract function getName();
 
 
-    protected function onPermissionGranted(Request $request, Response $response, $args)
+    protected function __invoke(Request $request, Response $response, $args)
     {
         $result = $this->validateCredentials($request);
         if($result){
@@ -46,9 +42,9 @@ abstract class GrantType extends APIAction
     protected abstract function grantAccess(Response $response,$args = []);
 
 
-    public function setAccessTokenProvider(TokenRepository $tokenRepository)
+    public function setAccessTokenRepository(TokenRepository $tokenRepository)
     {
-        $this->accessTokens = $tokenRepository;
+        $this->accessTokenRepository = $tokenRepository;
     }
 
 

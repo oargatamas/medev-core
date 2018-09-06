@@ -11,7 +11,7 @@ namespace MedevSlim\Core\Services\Auth\OAuth\Repository;
 
 
 
-interface UserAuthRepository
+interface UserRepository
 {
     public function IsCredentialsValid($username, $password);
     public function getUserData($username);

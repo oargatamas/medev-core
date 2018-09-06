@@ -22,12 +22,7 @@ class RefreshTokenGrant extends GrantType
     /**
      * @var TokenRepository
      */
-    private $refreshTokens;
-
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
+    private $refreshTokenRepository;
 
 
     public function getName()
@@ -39,7 +34,7 @@ class RefreshTokenGrant extends GrantType
     {
         $refreshToken = $request->getParsedBodyParam("refresh_token","");
 
-        return $this->refreshTokens->validateToken($refreshToken);
+        return $this->refreshTokenRepository->validateToken($refreshToken);
     }
 
 
@@ -47,9 +42,10 @@ class RefreshTokenGrant extends GrantType
     {
         $data = [];
 
-        $accessToken = $this->accessTokens->generateToken($args);
-        $this->accessTokens->persistToken($accessToken);
+        $accessToken = $this->accessTokenRepository->generateToken($args);
+        $this->accessTokenRepository->persistToken($accessToken);
 
+        $data["token_type"] = "Bearer";
         $data["access_token"] = $accessToken;
 
         $response->withStatus(200);
@@ -59,6 +55,6 @@ class RefreshTokenGrant extends GrantType
 
     public function setRefreshTokenProvider(TokenRepository $tokenRepository)
     {
-        $this->refreshTokens = $tokenRepository;
+        $this->refreshTokenRepository = $tokenRepository;
     }
 }
