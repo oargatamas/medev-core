@@ -42,4 +42,5 @@ abstract class APIService
 
     protected abstract function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container);
 
+    protected abstract function registerIOCComponents(ContainerInterface $container);
 }
