@@ -36,6 +36,7 @@ abstract class APIService
             $service->registerRoutes($app,$container);
         });
         $this->registerMiddlewares($group,$container);
+        $this->registerIOCComponents($container);
     }
 
     protected abstract function registerRoutes(App $app,ContainerInterface $container);
