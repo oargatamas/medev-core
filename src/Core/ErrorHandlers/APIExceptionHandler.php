@@ -21,15 +21,14 @@ class APIExceptionHandler extends Error
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
         $contentType = $this->determineContentType($request);
-
+        $statusCode = 500;
         if($exception instanceof APIException){
-            $response->getBody()->write($exception->getMessage());
-            return $response
-                ->withStatus($exception->getHTTPStatus())
-                ->withHeader('Content-type', $contentType);
-
-        }else{
-            return parent::__invoke($request,$response,$exception);
+            $statusCode = $exception->getHTTPStatus();
         }
+
+        $response->getBody()->write($exception->getMessage());
+        return $response
+            ->withStatus($statusCode)
+            ->withHeader('Content-type', $contentType);
     }
 }
