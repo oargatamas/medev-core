@@ -32,11 +32,13 @@ abstract class APIService
         $app = $this->application;
         $container = $app->getContainer();
 
+        $this->registerIOCComponents($container);
+        
         $group = $app->group($baseUrl, function()use ($app,$container,$service){
             $service->registerRoutes($app,$container);
         });
         $this->registerMiddlewares($group,$container);
-        $this->registerIOCComponents($container);
+
     }
 
     protected abstract function registerRoutes(App $app,ContainerInterface $container);
