@@ -23,7 +23,10 @@ class APIExceptionHandler extends Error
         $contentType = $this->determineContentType($request);
 
         if($exception instanceof APIException){
-            return $response->withStatus($exception->getHTTPStatus())->withHeader('Content-type', $contentType)->getBody()->write($exception->getMessage());
+            $response->getBody()->write($exception->getMessage());
+            return $response
+                ->withStatus($exception->getHTTPStatus())
+                ->withHeader('Content-type', $contentType);
 
         }else{
             return parent::__invoke($request,$response,$exception);
