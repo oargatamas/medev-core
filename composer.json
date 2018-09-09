@@ -14,7 +14,7 @@
     "catfan/medoo": "^1.5",
     "ext-json": "^1.6",
     "lcobucci/jwt": "3.2.4",
-    "monolog/monolog": "^2.0"
+    "monolog/monolog": "^1.23"
   },
   "autoload": {
     "psr-4": {
