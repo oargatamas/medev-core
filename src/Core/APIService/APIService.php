@@ -10,20 +10,31 @@ namespace MedevSlim\Core\APIService;
 
 
 use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
+use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Slim\App;
+use Slim\Container;
 use Slim\Interfaces\RouteGroupInterface;
 use Slim\RouteGroup;
 
 abstract class APIService
 {
 
+    /**
+     * @var App
+     */
     protected $application;
+    /**
+     * @var Logger
+     */
+    protected $logger;
 
     public function __construct(App $app)
     {
         $this->application = $app;
     }
+
+    public abstract function getServiceName();
 
 
     public function register($baseUrl = "/")
@@ -46,4 +57,6 @@ abstract class APIService
     protected abstract function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container);
 
     protected abstract function registerContainerComponents(ContainerInterface $container);
+
+    protected abstract function getLogger();
 }
