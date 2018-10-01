@@ -17,43 +17,38 @@ use Slim\Http\Response;
 
 abstract class APIAction
 {
-    private $permissions;
     protected $container;
 
 
-    public function __construct(ContainerInterface $container,$permissions = [])
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->permissions = $permissions;
     }
 
-    public function __invoke(Request $request,Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args)
     {
-        if ($this->hasPermission($request->getAttribute("scopes"))) {
-            return $this->onPermissionGranted($request, $response, $args);
-        } else {
-            throw new UnauthorizedException();
-        }
+        return $this->onPermissionGranted($request, $response, $args);
     }
 
-
-    private function hasPermission($permissionsFromClient)
-    {
-        if (empty($this->permissions)) { //If we did not set any permission, then we are Authorised! :)
-            return true;
-        }
-
-        foreach ($permissionsFromClient as $clientScope){
-            foreach ($this->permissions as $requiredScope){
-                if($clientScope === $requiredScope){
-                    return true; // We found the matching permission id -> Authorised request!
-                }
-            }
-        }
-
-        //we had no case when we can return with true -> Unauthorised request!
-        return false;
+    /**
+     * @return string[]
+     */
+    public static function getPermissions(){
+        return [];
     }
 
-    protected abstract function onPermissionGranted(Request $request,Response $response, $args);
+    /**
+     * @return string[]
+     */
+    public static function getRequiredRequestParams(){
+        return [];
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    protected abstract function onPermissionGranted(Request $request, Response $response, $args);
 }

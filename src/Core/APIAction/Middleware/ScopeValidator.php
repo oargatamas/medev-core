@@ -9,6 +9,7 @@
 namespace MedevSlim\Core\APIAction\Middleware;
 
 
+use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -25,10 +26,29 @@ class ScopeValidator
 
     public function __invoke(Request $request,Response $response,callable $next)
     {
-        $response->getBody()->write('BEFORE ScopeValidator');
-        $response = $next($request, $response);
-        $response->getBody()->write('AFTER ScopeValidator');
+        $scopesInRequest = $request->getAttribute("scopes");
+        if(!$this->hasPermission($scopesInRequest)){
+            throw new UnauthorizedException();
+        }
+        return $next($request, $response);
+    }
 
-        return $response;
+
+    private function hasPermission($permissionsFromClient)
+    {
+        if (empty($this->permissions)) { //If we did not set any permission, then we are Authorised! :)
+            return true;
+        }
+
+        foreach ($permissionsFromClient as $clientScope){
+            foreach ($this->permissions as $requiredScope){
+                if($clientScope === $requiredScope){
+                    return true; // We found the matching permission id -> Authorised request!
+                }
+            }
+        }
+
+        //we had no case when we can return with true -> Unauthorised request!
+        return false;
     }
 }
