@@ -24,10 +24,37 @@ class APIExceptionHandler extends Error
         if($exception instanceof APIException){
             $statusCode = $exception->getHTTPStatus();
         }
-        $message = $this->displayErrorDetails ? $this->renderJsonErrorMessage($exception) : $exception->getMessage();
+
+        $response->getBody()->write($this->renderJsonErrorMessage($exception));
+
         return $response
             ->withStatus($statusCode)
-            ->withHeader("Content-type", "application/json")
-            ->getBody()->write($message);
+            ->withHeader("Content-type", "application/json");
     }
+
+    protected function renderJsonErrorMessage(\Exception $exception)
+    {
+        $error = [
+            'message' => $exception->getMessage(), //Ezért a vacakért kellett felülírni az ősosztály metódusát...
+        ];
+
+        if ($this->displayErrorDetails) {
+            $error['exception'] = [];
+
+            do {
+                $error['exception'][] = [
+                    'type' => get_class($exception),
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                    'trace' => explode("\n", $exception->getTraceAsString()),
+                ];
+            } while ($exception = $exception->getPrevious());
+        }
+
+        return json_encode($error, JSON_PRETTY_PRINT);
+    }
+
+
 }
