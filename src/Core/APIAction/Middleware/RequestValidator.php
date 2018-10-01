@@ -6,7 +6,7 @@
  * Time: 11:33
  */
 
-namespace MedevSlim\Core\Middleware;
+namespace MedevSlim\Core\APIAction\Middleware;
 
 
 use MedevSlim\Core\APIService\Exceptions\BadRequestException;
