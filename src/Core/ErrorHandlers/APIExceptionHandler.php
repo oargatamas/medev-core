@@ -25,9 +25,9 @@ class APIExceptionHandler extends Error
             $statusCode = $exception->getHTTPStatus();
         }
         $message = $this->displayErrorDetails ? $this->renderJsonErrorMessage($exception) : $exception->getMessage();
-        $response->getBody()->write($message);
         return $response
             ->withStatus($statusCode)
-            ->withHeader("Content-type", "application/json");
+            ->withHeader("Content-type", "application/json")
+            ->getBody()->write($message);
     }
 }
