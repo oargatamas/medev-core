@@ -26,7 +26,7 @@ class ScopeValidator
 
     public function __invoke(Request $request,Response $response,callable $next)
     {
-        $scopesInRequest = $request->getAttribute("scopes");
+        $scopesInRequest = $request->getAttribute("scopes",[]);
         if(!$this->hasPermission($scopesInRequest)){
             throw new UnauthorizedException();
         }
