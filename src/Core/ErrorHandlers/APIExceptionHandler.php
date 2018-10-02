@@ -11,15 +11,32 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 use MedevSlim\Core\APIService\Exceptions\APIException;
+use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
 
 class APIExceptionHandler extends Error
 {
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * PHPRuntimeHandler constructor.
+     * @param Logger $logger
+     */
+    public function __construct(Logger $logger)
+    {
+        $this->logger = $logger;
+    }
+
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
+        $this->logger->log(Logger::ERROR,"APIException raised", [$request,$exception]);
+
         $statusCode = 500;
         if($exception instanceof APIException){
             $statusCode = $exception->getHTTPStatus();
