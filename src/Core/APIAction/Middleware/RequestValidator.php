@@ -41,6 +41,19 @@ class RequestValidator
             }
         }
 
-        return $next($request,$response);
+
+        $sanitizedBody = [];
+        foreach ($requestBody as $requestBodyParam => $key){
+            $sanitizedBody[$key] = filter_var($requestBodyParam, FILTER_SANITIZE_STRING);
+        }
+
+        $sanitizedQuery = [];
+        foreach ($request->getQueryParams() as $requestQueryParam => $key){
+            $sanitizedQuery[$key] = filter_var($requestQueryParam, FILTER_SANITIZE_STRING);
+        }
+
+        $sanitizedRequest = $request->withParsedBody($sanitizedBody)->withQueryParams($sanitizedQuery);
+
+        return $next($sanitizedRequest,$response);
     }
 }
