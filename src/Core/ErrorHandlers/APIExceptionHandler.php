@@ -25,11 +25,13 @@ class APIExceptionHandler extends Error
 
     /**
      * PHPRuntimeHandler constructor.
+     * @param boolean $displayErrorDetails
      * @param Logger $logger
      */
-    public function __construct(Logger $logger)
+    public function __construct($displayErrorDetails,Logger $logger)
     {
         $this->logger = $logger;
+        parent::__construct($displayErrorDetails);
     }
 
 
