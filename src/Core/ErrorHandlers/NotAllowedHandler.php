@@ -31,7 +31,7 @@ class NotAllowedHandler
     }
 
     public function __invoke(Request $request,Response $response, $methods) {
-        $this->logger->log(Logger::ERROR,"Method not allowed", [$request,$methods]);
+        $this->logger->log(Logger::ERROR,"Method not allowed", [$methods]);
 
         return $response
             ->withStatus(405)

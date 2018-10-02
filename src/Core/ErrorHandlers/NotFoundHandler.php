@@ -32,7 +32,7 @@ class NotFoundHandler
 
     public function __invoke(Request $request,Response $response) {
 
-        $this->logger->log(Logger::ERROR,"Route not found", [$request]);
+        $this->logger->log(Logger::ERROR,"Route not found", [$request->getUri()->__toString()]);
 
         return $response
             ->withStatus(404)

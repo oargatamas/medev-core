@@ -32,7 +32,7 @@ class PHPRuntimeHandler
 
     public function __invoke(Request $request, Response $response, $exception) {
 
-        $this->logger->log(Logger::ERROR,"PHPRuntime Exception raised",[$request,$exception]);
+        $this->logger->log(Logger::ERROR,"PHPRuntime Exception raised",[$exception]);
 
         return $response
             ->withStatus(500)

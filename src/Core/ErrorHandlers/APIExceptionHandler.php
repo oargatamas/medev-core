@@ -37,7 +37,7 @@ class APIExceptionHandler extends Error
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
-        $this->logger->log(Logger::ERROR,"APIException raised", [$request,$exception]);
+        $this->logger->log(Logger::ERROR,"APIException raised", [$exception]);
 
         $statusCode = 500;
         if($exception instanceof APIException){
