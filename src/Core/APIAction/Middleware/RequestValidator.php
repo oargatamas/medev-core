@@ -43,12 +43,12 @@ class RequestValidator
 
 
         $sanitizedBody = [];
-        foreach ($requestBody as $requestBodyParam => $key){
+        foreach ($requestBody as $key => $requestBodyParam){
             $sanitizedBody[$key] = filter_var($requestBodyParam, FILTER_SANITIZE_STRING);
         }
 
         $sanitizedQuery = [];
-        foreach ($request->getQueryParams() as $requestQueryParam => $key){
+        foreach ($request->getQueryParams() as $key => $requestQueryParam){
             $sanitizedQuery[$key] = filter_var($requestQueryParam, FILTER_SANITIZE_STRING);
         }
 
