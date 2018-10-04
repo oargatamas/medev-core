@@ -14,10 +14,12 @@ class APIException extends \Exception
 {
 
     protected $httpStatusCode;
+    protected $reasonPhrase;
 
-    public function __construct($message = "", $httpStatusCode = 500)
+    public function __construct($message = "", $httpStatusCode = 500,$reason = "")
     {
         $this->httpStatusCode = $httpStatusCode;
+        $this->reasonPhrase = $reason;
         parent::__construct($message, 0, null);
     }
 
@@ -25,4 +27,11 @@ class APIException extends \Exception
     {
         return $this->httpStatusCode;
     }
+
+    public function __toString()
+    {
+        return get_class($this) . " - " .$this->getMessage(). "(".$this->httpStatusCode.") - " . $this->reasonPhrase;
+    }
+
+
 }

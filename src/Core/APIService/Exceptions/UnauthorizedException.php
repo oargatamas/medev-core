@@ -11,9 +11,9 @@ namespace MedevSlim\Core\APIService\Exceptions;
 
 class UnauthorizedException extends APIException
 {
-    public function __construct()
+    public function __construct($reason = "")
     {
-        parent::__construct("Unauthorized", 401);
+        parent::__construct("Unauthorized", 401,$reason);
     }
 
 }
