@@ -37,7 +37,7 @@ class RequestValidator
         $requestBody = $request->getParsedBody();
         foreach ($this->requiredParams as $requiredParamName){
             if(!isset($requestBody[$requiredParamName])){
-                throw new BadRequestException();
+                throw new BadRequestException("Paramater not set in request: " . $requiredParamName);
             }
         }
 
