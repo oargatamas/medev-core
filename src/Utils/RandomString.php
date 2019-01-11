@@ -12,14 +12,15 @@ namespace MedevSlim\Utils;
 class RandomString
 {
     /**
+     * @param int $length
      * @return string
      */
-    public static function generate()
+    public static function generate($length = 8)
     {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
