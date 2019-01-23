@@ -10,14 +10,11 @@ namespace MedevSlim\Core\APIService;
 
 
 use MedevSlim\Core\APIAction\Middleware\RequestLogger;
-use MedevSlim\Core\APIService\Interfaces\ServiceConfiguration;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use RKA\Middleware\IpAddress;
 use Slim\App;
-use Slim\Container;
 use Slim\Interfaces\RouteGroupInterface;
-use Slim\RouteGroup;
 
 abstract class APIService
 {
@@ -58,9 +55,13 @@ abstract class APIService
 
     protected abstract function registerRoutes(App $app,ContainerInterface $container);
 
-    protected abstract function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container);
+    protected function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container){
+        //Do nothing
+    }
 
-    protected abstract function registerContainerComponents(ContainerInterface $container);
+    protected function registerContainerComponents(ContainerInterface $container){
+        //Do nothing
+    }
 
     protected abstract function getLogger();
 }
