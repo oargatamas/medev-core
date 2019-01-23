@@ -107,7 +107,7 @@ abstract class APIService
      * @throws \Exception
      */
     protected function getLogger(){
-        $logger = new Logger('MedevSuiteAuthServer');
+        $logger = new Logger($this->getServiceName());
 
         $logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT']."/../log/".$this->getServiceName().".log",$this->logLevel));
 
