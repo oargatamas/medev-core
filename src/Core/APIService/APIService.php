@@ -10,6 +10,7 @@ namespace MedevSlim\Core\APIService;
 
 
 use MedevSlim\Core\APIAction\Middleware\RequestLogger;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use RKA\Middleware\IpAddress;
@@ -28,14 +29,40 @@ abstract class APIService
      */
     protected $logger;
 
+    /**
+     * @var int
+     */
+    protected $logLevel;
+
+
+    /**
+     * APIService constructor.
+     * @param App $app
+     */
     public function __construct(App $app)
     {
         $this->application = $app;
+        $this->logLevel = Logger::DEBUG;
     }
 
+    /**
+     * @param int $logLevel
+     */
+    public function setLogLevel($logLevel)
+    {
+        $this->logLevel = $logLevel;
+    }
+
+    /**
+     * @return mixed
+     */
     public abstract function getServiceName();
 
 
+    /**
+     * @param string $baseUrl
+     * @throws \Exception
+     */
     public function register($baseUrl = "/")
     {
         $service = $this;
@@ -53,15 +80,37 @@ abstract class APIService
         $group->add(new IpAddress());
     }
 
-    protected abstract function registerRoutes(App $app,ContainerInterface $container);
+    /**
+     * @param App $app
+     * @param ContainerInterface $container
+     * @return mixed
+     */
+    protected abstract function registerRoutes(App $app, ContainerInterface $container);
 
+    /**
+     * @param RouteGroupInterface $group
+     * @param ContainerInterface $container
+     */
     protected function registerMiddlewares(RouteGroupInterface $group, ContainerInterface $container){
         //Do nothing
     }
 
+    /**
+     * @param ContainerInterface $container
+     */
     protected function registerContainerComponents(ContainerInterface $container){
         //Do nothing
     }
 
-    protected abstract function getLogger();
+    /**
+     * @return Logger
+     * @throws \Exception
+     */
+    protected function getLogger(){
+        $logger = new Logger('MedevSuiteAuthServer');
+
+        $logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT']."/../log/".$this->getServiceName().".log",$this->logLevel));
+
+        return $logger;
+    }
 }
