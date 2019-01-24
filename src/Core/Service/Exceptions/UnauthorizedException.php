@@ -6,7 +6,7 @@
  * Time: 9:04
  */
 
-namespace MedevSlim\Core\APIService\Exceptions;
+namespace MedevSlim\Core\Service\Exceptions;
 
 
 class UnauthorizedException extends APIException

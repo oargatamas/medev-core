@@ -6,7 +6,7 @@
  * Time: 11:39
  */
 
-namespace MedevSlim\Core\APIService\Traits;
+namespace MedevSlim\Core\Service\Traits;
 
 
 use Psr\Container\ContainerInterface;

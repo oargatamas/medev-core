@@ -6,7 +6,7 @@
  * Time: 8:27
  */
 
-namespace MedevSlim\Core\APIService\Exceptions;
+namespace MedevSlim\Core\Service\Exceptions;
 
 
 class BadRequestException extends APIException
