@@ -41,7 +41,6 @@ class APIExceptionHandler extends Error
 
         $statusCode = 500;
         if($exception instanceof APIException){
-
             $statusCode = $exception->getHTTPStatus();
         }
 
