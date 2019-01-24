@@ -10,7 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 
-use MedevSlim\Core\APIService\Exceptions\APIException;
+use MedevSlim\Core\Service\Exceptions\APIException;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
