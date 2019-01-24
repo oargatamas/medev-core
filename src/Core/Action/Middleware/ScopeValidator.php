@@ -6,25 +6,43 @@
  * Time: 9:42
  */
 
-namespace MedevSlim\Core\APIAction\Middleware;
+namespace MedevSlim\Core\Action\Middleware;
 
 
-use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
+use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class ScopeValidator
+ * @package MedevSlim\Core\Action\Middleware
+ */
 class ScopeValidator
 {
+    /**
+     * @var array
+     */
     private $requiredScopes;
 
 
+    /**
+     * ScopeValidator constructor.
+     * @param array|null $requiredScopes
+     */
     public function __construct(array $requiredScopes = null)
     {
         $this->requiredScopes = $requiredScopes;
     }
 
 
-    public function __invoke(Request $request,Response $response,callable $next)
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param callable $next
+     * @return Response
+     * @throws UnauthorizedException
+     */
+    public function __invoke(Request $request, Response $response, callable $next)
     {
         $scopesInRequest = $request->getAttribute("scopes",[]);
         if(!$this->hasPermission($scopesInRequest)){
@@ -34,6 +52,10 @@ class ScopeValidator
     }
 
 
+    /**
+     * @param $permissionsFromClient
+     * @return bool
+     */
     private function hasPermission($permissionsFromClient)
     {
         if (empty($this->permissions)) { //If we did not set any permission, then we are Authorised! :)

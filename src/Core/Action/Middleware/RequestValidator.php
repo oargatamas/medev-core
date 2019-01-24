@@ -6,13 +6,17 @@
  * Time: 11:33
  */
 
-namespace MedevSlim\Core\APIAction\Middleware;
+namespace MedevSlim\Core\Action\Middleware;
 
 
-use MedevSlim\Core\APIService\Exceptions\BadRequestException;
+use MedevSlim\Core\Service\Exceptions\BadRequestException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class RequestValidator
+ * @package MedevSlim\Core\Action\Middleware
+ */
 class RequestValidator
 {
 
@@ -32,6 +36,13 @@ class RequestValidator
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param callable $next
+     * @return Response
+     * @throws BadRequestException
+     */
     public function __invoke(Request $request, Response $response, callable $next)
     {
         $requestBody = $request->getParsedBody();

@@ -6,10 +6,9 @@
  * Time: 14:12
  */
 
-namespace MedevSlim\Core\APIAction\Middleware;
+namespace MedevSlim\Core\Action\Middleware;
 
 
-use MedevSlim\Core\APIService\Exceptions\UnauthorizedException;
 use MedevSlim\Utils\UUID\UUID;
 use Monolog\Logger;
 use Slim\Http\Request;
