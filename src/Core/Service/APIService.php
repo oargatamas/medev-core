@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Service;
 
 
 use MedevSlim\Core\Action\Middleware\RequestLogger;
+use MedevSlim\Core\Logging\LogContainer;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -79,9 +80,15 @@ abstract class APIService
 
     /**
      * @return Logger
+     * @throws \Exception
      */
     public function getLogger()
     {
+        if(is_null($this->logger)){
+            $this->logger = new Logger($this->getServiceName());
+            $this->logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . $this->getServiceName() . ".log", $this->logLevel));
+        }
+
         return $this->logger;
     }
 
@@ -99,7 +106,6 @@ abstract class APIService
      */
     public function registerService($baseUrl = "/")
     {
-        $this->initLogger();
         $service = $this;
         $app = $this->application;
         $container = $app->getContainer();
@@ -107,14 +113,13 @@ abstract class APIService
         $this->registerContainerComponents($container);
 
         $group = $app->group($baseUrl, function()use ($app,$service){
-            $service->registerRoutes($app);
+            $service->registerRoutes($app); //Itt a "this" nem az APIService hanem ahol meghívódik a függvény
         });
         $this->registerMiddlewares($group);
     }
 
     /**
      * @param App $app
-     * @return mixed
      */
     protected abstract function registerRoutes(App $app);
 
@@ -129,18 +134,12 @@ abstract class APIService
 
     /**
      * @param ContainerInterface $container
-     */
-    protected function registerContainerComponents(ContainerInterface $container){
-        //Do nothing
-    }
-
-    /**
      * @throws \Exception
      */
-    protected function initLogger(){
-        $logger = new Logger($this->getServiceName());
-        $this->logLevel = Logger::DEBUG;
-        //Todo add mail handler for Critical errors
-        $logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT']."/../log/".$this->getServiceName().".log",$this->logLevel));
+    protected function registerContainerComponents(ContainerInterface $container){
+        /** @var LogContainer $logContainer */
+        $logContainer = $container->get(LogContainer::class);
+        $logContainer->addLogger($this->getLogger());
     }
+
 }
