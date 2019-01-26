@@ -9,10 +9,19 @@
 namespace MedevSlim\Core\Service\Exceptions;
 
 
+/**
+ * Class BadRequestException
+ * @package MedevSlim\Core\Service\Exceptions
+ */
 class BadRequestException extends APIException
 {
-    public function __construct($reason = "")
+    /**
+     * BadRequestException constructor.
+     * @param string $service
+     * @param string $reason
+     */
+    public function __construct($service = "", $reason = "")
     {
-        parent::__construct("Bad Request", 400,$reason);
+        parent::__construct($service,"Bad Request", 400,$reason);
     }
 }

@@ -9,11 +9,20 @@
 namespace MedevSlim\Core\Service\Exceptions;
 
 
+/**
+ * Class UnauthorizedException
+ * @package MedevSlim\Core\Service\Exceptions
+ */
 class UnauthorizedException extends APIException
 {
-    public function __construct($reason = "")
+    /**
+     * UnauthorizedException constructor.
+     * @param string $service
+     * @param string $reason
+     */
+    public function __construct($service = "", $reason = "")
     {
-        parent::__construct("Unauthorized", 401,$reason);
+        parent::__construct($service,"Unauthorized", 401,$reason);
     }
 
 }
