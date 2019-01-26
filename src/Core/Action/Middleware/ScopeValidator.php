@@ -9,6 +9,7 @@
 namespace MedevSlim\Core\Action\Middleware;
 
 
+use MedevSlim\Core\Action\RequestAttribute;
 use MedevSlim\Core\Service\Exceptions\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -44,7 +45,7 @@ class ScopeValidator
      */
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $scopesInRequest = $request->getAttribute("scopes",[]);
+        $scopesInRequest = $request->getAttribute(RequestAttribute::SCOPES,[]);
         if(!$this->hasPermission($scopesInRequest)){
             throw new UnauthorizedException();
         }

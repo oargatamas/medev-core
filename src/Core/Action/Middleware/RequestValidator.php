@@ -47,7 +47,7 @@ class RequestValidator
     {
         $requestBody = $request->getParsedBody();
         foreach ($this->requiredParams as $requiredParamName){
-            if(!isset($requestBody[$requiredParamName])){
+            if(!isset($requestBody[$requiredParamName])){ //Todo check whether the isset() is enough or not
                 throw new BadRequestException("Paramater not set in request: " . $requiredParamName);
             }
         }
