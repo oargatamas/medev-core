@@ -9,13 +9,24 @@
 namespace MedevSlim\Core\Action\Middleware;
 
 
+use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Service\APIService;
 use MedevSlim\Utils\UUID\UUID;
 use Monolog\Logger;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class RequestLogger
+ * @package MedevSlim\Core\Action\Middleware
+ */
 class RequestLogger
 {
+    /**
+     * @var APIService
+     */
+    private $service;
+
     /**
      * @var Logger
      */
@@ -23,37 +34,50 @@ class RequestLogger
 
     /**
      * RequestLogger constructor.
-     * @param Logger $logger
+     * @param APIService $service
+     * @throws \Exception
      */
-    public function __construct(Logger $logger)
+    public function __construct(APIService $service)
     {
-        $this->logger = $logger;
+        $this->service = $service;
+        $this->logger = $service->getLogger();
     }
 
 
-    public function __invoke(Request $request,Response $response,callable $next)
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param callable $next
+     * @return Response
+     */
+    public function __invoke(Request $request, Response $response, callable $next)
     {
         //Todo move labels to constants
         $uniqueId = UUID::v4();
         $inboundLogData = [
             "CorrelationId" => $uniqueId,
-            "Initiator" => $request->getAttribute("ip_address"),
+            "Initiator" => $request->getAttribute(RequestAttribute::IP_ADDRESS),
             "URI" => $request->getUri(),
             "Method" => $request->getMethod(),
             "Params" => $request->getParams()
         ];
 
-        $this->logger->log(Logger::INFO,"Inbound request data",$inboundLogData);
+        $this->logger->info("Inbound request data",$inboundLogData);
 
+
+        $attributes = [
+            RequestAttribute::HANDLER_SERVICE => $this->service->getServiceName(),
+            RequestAttribute::CORRELATION_ID => $uniqueId,
+        ];
 
         /** @var Response $finalResponse */
-        $finalResponse = $next($request->withAttribute("CorrelationId", $uniqueId), $response);
+        $finalResponse = $next($request->withAttributes($attributes), $response);
 
         $outgoingLogData = [
-            "CorrelationId" => $uniqueId,
-            "ResponseData" => $finalResponse->__toString()
+            RequestAttribute::CORRELATION_ID => $uniqueId,
+            RequestAttribute::RESPONSE_DATA => $finalResponse->__toString()
         ];
-        $this->logger->log(Logger::INFO,"Outbound response data",$outgoingLogData);
+        $this->logger->info("Outbound response data",$outgoingLogData);
 
         return $finalResponse;
     }
