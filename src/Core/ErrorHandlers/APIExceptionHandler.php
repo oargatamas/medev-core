@@ -10,8 +10,10 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 
+use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Service\Exceptions\APIException;
-use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
@@ -19,25 +21,25 @@ use Slim\Handlers\Error;
 class APIExceptionHandler extends Error
 {
     /**
-     * @var Logger
+     * @var LogContainer
      */
-    private $logger;
+    private $logContainer;
 
     /**
      * PHPRuntimeHandler constructor.
+     * @param ContainerInterface $container
      * @param boolean $displayErrorDetails
-     * @param Logger $logger
      */
-    public function __construct($displayErrorDetails,Logger $logger)
+    public function __construct(ContainerInterface $container,$displayErrorDetails)
     {
-        $this->logger = $logger;
+        $this->logContainer = $container->get(LogContainer::class);
         parent::__construct($displayErrorDetails);
     }
 
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
-        $this->logger->log(Logger::ERROR,"APIException raised", [$exception->__toString()]);
+        $this->logContainer->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"APIException raised", [$exception->__toString()]);
 
         $statusCode = 500;
         if($exception instanceof APIException){

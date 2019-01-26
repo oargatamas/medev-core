@@ -9,30 +9,47 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
-use Monolog\Logger;
+use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Logging\LogContainer;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class PHPRuntimeHandler
+ * @package MedevSlim\Core\ErrorHandlers
+ */
 class PHPRuntimeHandler
 {
     /**
-     * @var Logger
+     * @var ContainerInterface
      */
-    private $logger;
+    private $container;
+
+    /**
+     * @var LogContainer
+     */
+    private $logContainer;
 
     /**
      * PHPRuntimeHandler constructor.
-     * @param Logger $logger
+     * @param ContainerInterface $container
      */
-    public function __construct(Logger $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->logger = $logger;
+        $this->container = $container;
+        $this->logContainer = $this->container->get(LogContainer::class);
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $exception
+     * @return Response
+     */
     public function __invoke(Request $request, Response $response, $exception) {
-
-        $this->logger->log(Logger::ERROR,"PHPRuntime Exception raised",[$exception]);
+        $this->logContainer->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"Error during request handling: ",[$exception]);
 
         return $response
             ->withStatus(500)
