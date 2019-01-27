@@ -10,6 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
+use MedevSlim\Core\Logging\LogContainer;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
@@ -57,7 +58,7 @@ class NotAllowedHandler implements DependencyInjector
     static function inject(ContainerInterface $container)
     {
         $container["notAllowedHandler"] = function () use ($container) {
-            return new NotAllowedHandler($container["logger"]);
+            return new NotAllowedHandler($container[LogContainer::class]);
         };
     }
 }

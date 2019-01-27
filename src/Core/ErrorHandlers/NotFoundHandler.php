@@ -10,6 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
+use MedevSlim\Core\Logging\LogContainer;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
@@ -57,7 +58,7 @@ class NotFoundHandler implements DependencyInjector
     static function inject(ContainerInterface $container)
     {
         $container["notFoundHandler"] = function () use ($container) {
-            return new NotFoundHandler($container["logger"]);
+            return new NotFoundHandler($container[LogContainer::class]);
         };
     }
 }
