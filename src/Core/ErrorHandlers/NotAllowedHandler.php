@@ -9,11 +9,17 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class NotAllowedHandler
+/**
+ * Class NotAllowedHandler
+ * @package MedevSlim\Core\ErrorHandlers
+ */
+class NotAllowedHandler implements DependencyInjector
 {
 
     /**
@@ -30,12 +36,28 @@ class NotAllowedHandler
         $this->logger = $logger;
     }
 
-    public function __invoke(Request $request,Response $response, $methods) {
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $methods
+     * @return Response
+     */
+    public function __invoke(Request $request, Response $response, $methods) {
         $this->logger->log(Logger::ERROR,"Method not allowed", [$methods]);
 
         return $response
             ->withStatus(405)
             ->withHeader('Content-Type', 'application/json')
             ->write(json_encode("Method not allowed"));
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    static function inject(ContainerInterface $container)
+    {
+        $container["notAllowedHandler"] = function () use ($container) {
+            return new NotAllowedHandler($container["logger"]);
+        };
     }
 }

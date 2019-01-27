@@ -9,14 +9,16 @@
 namespace MedevSlim\Core\Logging;
 
 
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class LogContainer
  * @package MedevSlim\Core\Logging
  */
-class LogContainer
+class LogContainer implements DependencyInjector
 {
     const DEFAULT_LOGGER_CHANNEL = "ApplicationDefault";
 
@@ -117,5 +119,15 @@ class LogContainer
     public function error($channel, $message, $args)
     {
         $this->log($channel, Logger::ERROR, $message, $args);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    static function inject(ContainerInterface $container)
+    {
+        $container[LogContainer::class] = function (){
+            return new LogContainer();
+        };
     }
 }

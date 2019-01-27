@@ -9,11 +9,17 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class NotFoundHandler
+/**
+ * Class NotFoundHandler
+ * @package MedevSlim\Core\ErrorHandlers
+ */
+class NotFoundHandler implements DependencyInjector
 {
 
     /**
@@ -30,7 +36,12 @@ class NotFoundHandler
         $this->logger = $logger;
     }
 
-    public function __invoke(Request $request,Response $response) {
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function __invoke(Request $request, Response $response) {
 
         $this->logger->log(Logger::ERROR,"Route not found", [$request->getUri()->__toString()]);
 
@@ -38,5 +49,15 @@ class NotFoundHandler
             ->withStatus(404)
             ->withHeader('Content-Type', 'application/json')
             ->write(json_encode("Content not found"));
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    static function inject(ContainerInterface $container)
+    {
+        $container["notFoundHandler"] = function () use ($container) {
+            return new NotFoundHandler($container["logger"]);
+        };
     }
 }

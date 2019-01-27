@@ -11,6 +11,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Service\Exceptions\APIException;
 use Psr\Container\ContainerInterface;
@@ -18,7 +19,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
 
-class APIExceptionHandler extends Error
+/**
+ * Class APIExceptionHandler
+ * @package MedevSlim\Core\ErrorHandlers
+ */
+class APIExceptionHandler extends Error implements DependencyInjector
 {
     /**
      * @var LogContainer
@@ -37,6 +42,12 @@ class APIExceptionHandler extends Error
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param \Exception $exception
+     * @return ResponseInterface
+     */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
         $this->logContainer->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"APIException raised", [$exception->__toString()]);
@@ -51,5 +62,15 @@ class APIExceptionHandler extends Error
         return $response
             ->withStatus($statusCode)
             ->withHeader("Content-type", "application/json");
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    static function inject(ContainerInterface $container)
+    {
+        $container["errorHandler"] = function () use ($container) {
+            return new APIExceptionHandler($container,$container->get('settings')['displayErrorDetails']);
+        };
     }
 }

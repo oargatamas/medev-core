@@ -10,6 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
@@ -19,7 +20,7 @@ use Slim\Http\Response;
  * Class PHPRuntimeHandler
  * @package MedevSlim\Core\ErrorHandlers
  */
-class PHPRuntimeHandler
+class PHPRuntimeHandler implements DependencyInjector
 {
     /**
      * @var ContainerInterface
@@ -55,5 +56,15 @@ class PHPRuntimeHandler
             ->withStatus(500)
             ->withHeader('Content-Type', 'application/json')
             ->write(json_encode("Something went wrong."));
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    static function inject(ContainerInterface $container)
+    {
+        $container["phpErrorHandler"] = function () use ($container) {
+            return new PHPRuntimeHandler($container);
+        };
     }
 }
