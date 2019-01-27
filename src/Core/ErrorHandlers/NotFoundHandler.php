@@ -24,7 +24,7 @@ class NotFoundHandler implements DependencyInjector
 {
 
     /**
-     * @var Logger
+     * @var LogContainer
      */
     private $logger;
 
@@ -32,7 +32,7 @@ class NotFoundHandler implements DependencyInjector
      * PHPRuntimeHandler constructor.
      * @param Logger $logger
      */
-    public function __construct(Logger $logger)
+    public function __construct(LogContainer $logger)
     {
         $this->logger = $logger;
     }

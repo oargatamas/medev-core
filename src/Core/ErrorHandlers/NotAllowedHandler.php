@@ -24,15 +24,15 @@ class NotAllowedHandler implements DependencyInjector
 {
 
     /**
-     * @var Logger
+     * @var LogContainer
      */
     private $logger;
 
     /**
      * PHPRuntimeHandler constructor.
-     * @param Logger $logger
+     * @param LogContainer $logger
      */
-    public function __construct(Logger $logger)
+    public function __construct(LogContainer $logger)
     {
         $this->logger = $logger;
     }
@@ -44,7 +44,7 @@ class NotAllowedHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response, $methods) {
-        $this->logger->log(Logger::ERROR,"Method not allowed", [$methods]);
+        $this->logger->error(Logger::ERROR,"Method not allowed", [$methods]);
 
         return $response
             ->withStatus(405)
