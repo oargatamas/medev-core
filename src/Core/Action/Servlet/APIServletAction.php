@@ -29,6 +29,18 @@ abstract class APIServletAction extends APIServiceAction
         parent::__construct($service);
     }
 
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     */
+    public function __invoke(Request $request, Response $response, $args)
+    {
+        return $this->handleRequest($request,$response,$args);
+    }
+
     /**
      * @param Request $request
      * @param Response $response
