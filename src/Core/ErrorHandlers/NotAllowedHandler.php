@@ -9,9 +9,9 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
+use MedevSlim\Core\Action\RequestAttribute;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
-use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -44,7 +44,7 @@ class NotAllowedHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response, $methods) {
-        $this->logger->error(Logger::ERROR,"Method not allowed", [$methods]);
+        $this->logger->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"Method not allowed", [$methods]);
 
         return $response
             ->withStatus(405)
