@@ -125,9 +125,10 @@ abstract class APIService
 
     /**
      * @param RouteGroupInterface $group
+     * @throws \Exception
      */
     protected function registerMiddlewares(RouteGroupInterface $group){
-        $group->add(new RequestLogger($this->logger));
+        $group->add(new RequestLogger($this));
         $group->add(new IpAddress());
     }
 
