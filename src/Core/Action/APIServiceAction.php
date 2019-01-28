@@ -32,4 +32,18 @@ abstract class APIServiceAction
     {
         $this->service = $service;
     }
+
+    /**
+     * @return string[]
+     */
+    static function getScopes(){
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    static function getParams(){
+        return [];
+    }
 }
