@@ -55,14 +55,14 @@ class RequestLogger
         //Todo move labels to constants
         $uniqueId = UUID::v4();
         $inboundLogData = [
-            "CorrelationId" => $uniqueId,
-            "Initiator" => $request->getAttribute(RequestAttribute::IP_ADDRESS),
-            "URI" => $request->getUri(),
-            "Method" => $request->getMethod(),
-            "Params" => $request->getParams()
+            RequestAttribute::CORRELATION_ID => $uniqueId,
+            RequestAttribute::INITIATOR => $request->getAttribute(RequestAttribute::IP_ADDRESS),
+            RequestAttribute::URI => $request->getUri(),
+            RequestAttribute::METHOD => $request->getMethod(),
+            RequestAttribute::REQUEST_PARAMS => $request->getParams()
         ];
 
-        $this->logger->info("Inbound request data",$inboundLogData);
+        $this->logger->info("Inbound request data: ",$inboundLogData);
 
 
         $attributes = [
@@ -77,7 +77,7 @@ class RequestLogger
             RequestAttribute::CORRELATION_ID => $uniqueId,
             RequestAttribute::RESPONSE_DATA => $finalResponse->__toString()
         ];
-        $this->logger->info("Outbound response data",$outgoingLogData);
+        $this->logger->info("Outbound response data: ",$outgoingLogData);
 
         return $finalResponse;
     }

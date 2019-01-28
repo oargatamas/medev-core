@@ -12,8 +12,12 @@ namespace MedevSlim\Core\Action;
 class RequestAttribute
 {
     const IP_ADDRESS = "ip_address";
-    const SCOPES = "scopes";
-    const CORRELATION_ID = "correlation_id";
-    const HANDLER_SERVICE = "handler_service";
-    const RESPONSE_DATA = "response_data";
+    const SCOPES = "Scopes";
+    const CORRELATION_ID = "Correlation Id";
+    const HANDLER_SERVICE = "Handler Service";
+    const RESPONSE_DATA = "Response Data";
+    const INITIATOR = "Initiator";
+    const URI = "URI";
+    const METHOD = "Method";
+    const REQUEST_PARAMS = "Params";
 }
