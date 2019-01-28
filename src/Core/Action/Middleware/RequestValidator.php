@@ -19,8 +19,6 @@ use Slim\Http\Response;
  */
 class RequestValidator
 {
-
-
     /**
      * @var string[]
      */
@@ -30,7 +28,7 @@ class RequestValidator
      * RequestValidator constructor.
      * @param string[] $requiredParams
      */
-    public function __construct(array $requiredParams)
+    public function __construct($requiredParams)
     {
         $this->requiredParams = $requiredParams;
     }
@@ -46,20 +44,25 @@ class RequestValidator
     public function __invoke(Request $request, Response $response, callable $next)
     {
         $requestBody = $request->getParsedBody();
+        $requestParams = $request->getQueryParams();
+
         foreach ($this->requiredParams as $requiredParamName){
-            if(!isset($requestBody[$requiredParamName])){ //Todo check whether the isset() is enough or not
+            if($request->isPost() && !isset($requestBody[$requiredParamName])){
+                throw new BadRequestException("Paramater not set in request: " . $requiredParamName);
+            }
+            if($request->isGet() && !isset($requestParams[$requiredParamName])){
                 throw new BadRequestException("Paramater not set in request: " . $requiredParamName);
             }
         }
 
 
         $sanitizedBody = [];
-        foreach ($requestBody as $key => $requestBodyParam){
+        foreach ((array)$requestBody as $key => $requestBodyParam){
             $sanitizedBody[$key] = filter_var($requestBodyParam, FILTER_SANITIZE_STRING);
         }
 
         $sanitizedQuery = [];
-        foreach ($request->getQueryParams() as $key => $requestQueryParam){
+        foreach ((array)$requestParams as $key => $requestQueryParam){
             $sanitizedQuery[$key] = filter_var($requestQueryParam, FILTER_SANITIZE_STRING);
         }
 
