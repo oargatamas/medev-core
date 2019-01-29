@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Action;
 
 
 use MedevSlim\Core\Service\APIService;
+use Monolog\Logger;
 
 
 /**
@@ -25,12 +26,19 @@ abstract class APIServiceAction
 
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * APIServiceAction constructor.
      * @param APIService $service
+     * @throws \Exception
      */
     public function __construct(APIService $service)
     {
         $this->service = $service;
+        $this->logger = $service->getLogger();
     }
 
     /**
