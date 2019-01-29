@@ -53,7 +53,7 @@ class PHPRuntimeHandler implements DependencyInjector
         $uniqueId = $this->app->getUniqueId();
         $channel = $this->app->getChannel();
 
-        $this->logger->error($channel,$uniqueId,"Error during request handling: ",[$exception]);
+        $this->logger->error($channel,$uniqueId,"Error during request handling: ". (string)$exception);
 
         return $response
             ->withStatus(500)

@@ -64,7 +64,7 @@ class RequestLogger
         ];
 
 
-        $this->logger->info($channel, $uniqueId,"Inbound request data: ",$inboundLogData);
+        $this->logger->info($channel, $uniqueId,"Inbound request data: ".implode(",",$inboundLogData));
 
         $attributes = [
             RequestAttribute::CORRELATION_ID => $uniqueId
@@ -76,7 +76,7 @@ class RequestLogger
         $outgoingLogData = [
             RequestAttribute::RESPONSE_DATA => $finalResponse->__toString()
         ];
-        $this->logger->info($channel, $uniqueId,"Outbound response data: ",$outgoingLogData);
+        $this->logger->info($channel, $uniqueId,"Outbound response data: ". implode(",",$outgoingLogData));
 
         return $finalResponse;
     }

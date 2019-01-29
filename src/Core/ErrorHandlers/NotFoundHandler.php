@@ -53,7 +53,7 @@ class NotFoundHandler implements DependencyInjector
         $uniqueId = $this->app->getUniqueId();
         $channel = $this->app->getChannel();
 
-        $this->logger->error($channel,$uniqueId,"Route not found", [$request->getUri()->__toString()]);
+        $this->logger->error($channel,$uniqueId,"Route not found: " .$request->getUri()->__toString());
 
         return $response
             ->withStatus(404)

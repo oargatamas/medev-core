@@ -52,15 +52,8 @@ class NotAllowedHandler implements DependencyInjector
         $uniqueId = $this->app->getUniqueId();
         $channel = $this->app->getChannel();
 
-        $logData = [
-            "Allowed methods" => $methods,
-            "Request data" => [
-                $request->getMethod(),
-                (string)$request->getUri()
-            ]
-        ];
 
-        $this->logger->error($channel,$uniqueId,"Method not allowed.", $logData);
+        $this->logger->error($channel,$uniqueId,$request->getMethod()." method not allowed. Allowed method(s): ". $methods);
 
         return $response
             ->withStatus(405)

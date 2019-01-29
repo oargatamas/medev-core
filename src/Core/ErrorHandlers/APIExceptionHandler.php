@@ -61,7 +61,7 @@ class APIExceptionHandler extends Error implements DependencyInjector
         $channel = $this->app->getChannel();
 
 
-        $this->logger->error($channel,$uniqueId,"APIException raised", [$exception->__toString()]);
+        $this->logger->error($channel,$uniqueId,"Exception during request: ".$exception->__toString()."\n StackTrace: ".$exception->getTraceAsString());
 
         $statusCode = 500;
         if($exception instanceof APIException){
