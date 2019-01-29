@@ -78,7 +78,7 @@ class LogContainer implements DependencyInjector
      * @param string $message
      * @param array $args
      */
-    public function log($channel, $loglevel, $correlationId, $message, $args)
+    public function log($channel, $loglevel, $correlationId, $message, $args = [])
     {
         $logger = $this->getLogger($channel);
         $args[RequestAttribute::CORRELATION_ID] = $correlationId;
@@ -91,7 +91,7 @@ class LogContainer implements DependencyInjector
      * @param string $message
      * @param array $args
      */
-    public function debug($channel, $correlationId, $message, $args)
+    public function debug($channel, $correlationId, $message, $args = [])
     {
         $this->log($channel, Logger::DEBUG, $correlationId, $message, $args);
     }
@@ -102,7 +102,7 @@ class LogContainer implements DependencyInjector
      * @param string $message
      * @param array $args
      */
-    public function info($channel, $correlationId, $message, $args)
+    public function info($channel, $correlationId, $message, $args = [])
     {
         $this->log($channel, Logger::INFO, $correlationId, $message, $args);
     }
@@ -113,7 +113,7 @@ class LogContainer implements DependencyInjector
      * @param string $message
      * @param array $args
      */
-    public function warn($channel, $correlationId, $message, $args)
+    public function warn($channel, $correlationId, $message, $args = [])
     {
         $this->log($channel, Logger::WARNING, $correlationId, $message, $args);
     }
@@ -124,7 +124,7 @@ class LogContainer implements DependencyInjector
      * @param string $message
      * @param array $args
      */
-    public function error($channel, $correlationId, $message, $args)
+    public function error($channel, $correlationId, $message, $args =[])
     {
         $this->log($channel, Logger::ERROR, $correlationId, $message, $args);
     }
