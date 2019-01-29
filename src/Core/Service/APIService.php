@@ -11,6 +11,7 @@ namespace MedevSlim\Core\Service;
 
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Logging\LogContainer;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -42,10 +43,19 @@ abstract class APIService
     /**
      * APIService constructor.
      * @param MedevApp $app
+     * @throws \Exception
      */
     public function __construct(MedevApp $app)
     {
         $this->application = $app;
+
+        $logger = new Logger($this->getServiceName());
+        $handler = new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . $this->getServiceName() . ".log", $this->logLevel);
+        $formatter = new LineFormatter(LogContainer::LOG_FILE_FORMAT);
+        $handler->setFormatter($formatter);
+        $logger->pushHandler($handler);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -83,11 +93,6 @@ abstract class APIService
      */
     public function getLogger()
     {
-        if(is_null($this->logger)){
-            $this->logger = new Logger($this->getServiceName());
-            $this->logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . $this->getServiceName() . ".log", $this->logLevel));
-        }
-
         return $this->logger;
     }
 
