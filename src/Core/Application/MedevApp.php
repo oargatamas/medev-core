@@ -63,7 +63,12 @@ class MedevApp extends App
     }
 
 
-
+    /**
+     * @param bool $silent
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \Slim\Exception\MethodNotAllowedException
+     * @throws \Slim\Exception\NotFoundException
+     */
     public function run($silent = false)
     {
         $this->uniqueId = $this->generateRequestUniqueId();
