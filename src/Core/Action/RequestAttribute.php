@@ -13,8 +13,8 @@ class RequestAttribute
 {
     const IP_ADDRESS = "ip_address";
     const SCOPES = "Scopes";
-    const CORRELATION_ID = "Correlation Id";
-    const RESPONSE_DATA = "Response Data";
+    const CORRELATION_ID = "CorrelationId";
+    const RESPONSE_DATA = "ResponseData";
     const INITIATOR = "Initiator";
     const URI = "URI";
     const METHOD = "Method";
