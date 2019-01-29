@@ -57,8 +57,7 @@ class NotFoundHandler implements DependencyInjector
 
         return $response
             ->withStatus(404)
-            ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode("Content not found"));
+            ->withJson("Content not found");
     }
 
     /**

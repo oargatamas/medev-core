@@ -63,15 +63,14 @@ class APIExceptionHandler extends Error implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,"Exception during request: ".$exception->__toString()."\n StackTrace: ".$exception->getTraceAsString());
 
+        $message = "Internal Server Error";
         $statusCode = 500;
         if($exception instanceof APIException){
             $statusCode = $exception->getHTTPStatus();
+            $message = $exception->getMessage();
         }
 
-        var_dump($request);
-
-        $response->getBody()->write($this->renderJsonErrorMessage($exception));
-        //$response->getBody()->write(json_encode($request);
+        $response->getBody()->write(json_encode($message));
 
         return $response
             ->withStatus($statusCode)

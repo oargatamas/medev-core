@@ -57,8 +57,7 @@ class PHPRuntimeHandler implements DependencyInjector
 
         return $response
             ->withStatus(500)
-            ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode("Something went wrong."));
+            ->withJson("Internal Server Error");
     }
 
     /**
