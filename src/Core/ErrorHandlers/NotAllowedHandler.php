@@ -53,7 +53,7 @@ class NotAllowedHandler implements DependencyInjector
         $channel = $this->app->getChannel();
 
 
-        $this->logger->error($channel,$uniqueId,$request->getMethod()." method not allowed. Allowed method(s): ". $methods);
+        $this->logger->error($channel,$uniqueId,$request->getMethod()." method not allowed. Allowed method(s): ". implode(", ",$methods));
 
         return $response
             ->withStatus(405)
