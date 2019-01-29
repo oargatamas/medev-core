@@ -9,7 +9,7 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
-use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
@@ -22,19 +22,26 @@ use Slim\Http\Response;
  */
 class NotFoundHandler implements DependencyInjector
 {
+    /**
+     * @var MedevApp
+     */
+    private $app;
 
     /**
      * @var LogContainer
      */
     private $logger;
 
+
+
     /**
      * PHPRuntimeHandler constructor.
-     * @param LogContainer $logger
+     * @param ContainerInterface $container
      */
-    public function __construct(LogContainer $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->logger = $logger;
+        $this->app = $container->get(MedevApp::class);
+        $this->logger = $container->get(LogContainer::class);
     }
 
     /**
@@ -43,8 +50,10 @@ class NotFoundHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response) {
+        $uniqueId = $this->app->getUniqueId();
+        $channel = $this->app->getChannel();
 
-        $this->logger->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"Route not found", [$request->getUri()->__toString()]);
+        $this->logger->error($channel,$uniqueId,"Route not found", [$request->getUri()->__toString()]);
 
         return $response
             ->withStatus(404)
@@ -57,8 +66,8 @@ class NotFoundHandler implements DependencyInjector
      */
     static function inject(ContainerInterface $container)
     {
-        $container["notFoundHandler"] = function () use ($container) {
-            return new NotFoundHandler($container[LogContainer::class]);
+        $container["notFoundHandler"] = function (ContainerInterface $container){
+            return new NotFoundHandler($container);
         };
     }
 }

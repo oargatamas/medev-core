@@ -17,11 +17,17 @@ class BadRequestException extends APIException
 {
     /**
      * BadRequestException constructor.
-     * @param string $service
      * @param string $reason
      */
-    public function __construct($service = "", $reason = "")
+    public function __construct($reason = "")
     {
-        parent::__construct($service,"Bad Request", 400,$reason);
+        parent::__construct("Bad Request", 400,$reason);
     }
+
+    public function __toString()
+    {
+        return parent::__toString();
+    }
+
+
 }

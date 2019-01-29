@@ -9,7 +9,7 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
-use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
@@ -23,14 +23,14 @@ use Slim\Http\Response;
 class PHPRuntimeHandler implements DependencyInjector
 {
     /**
-     * @var ContainerInterface
+     * @var MedevApp
      */
-    private $container;
+    private $app;
 
     /**
      * @var LogContainer
      */
-    private $logContainer;
+    private $logger;
 
     /**
      * PHPRuntimeHandler constructor.
@@ -38,8 +38,8 @@ class PHPRuntimeHandler implements DependencyInjector
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->logContainer = $this->container->get(LogContainer::class);
+        $this->app = $container->get(MedevApp::class);
+        $this->logger = $container->get(LogContainer::class);
     }
 
 
@@ -50,7 +50,10 @@ class PHPRuntimeHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response, $exception) {
-        $this->logContainer->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"Error during request handling: ",[$exception]);
+        $uniqueId = $this->app->getUniqueId();
+        $channel = $this->app->getChannel();
+
+        $this->logger->error($channel,$uniqueId,"Error during request handling: ",[$exception]);
 
         return $response
             ->withStatus(500)
@@ -63,7 +66,7 @@ class PHPRuntimeHandler implements DependencyInjector
      */
     static function inject(ContainerInterface $container)
     {
-        $container["phpErrorHandler"] = function () use ($container) {
+        $container["phpErrorHandler"] = function (ContainerInterface $container) {
             return new PHPRuntimeHandler($container);
         };
     }

@@ -17,12 +17,11 @@ class ForbiddenException extends APIException
 {
     /**
      * ForbiddenException constructor.
-     * @param string $service
      * @param string $reason
      */
-    public function __construct($service = "", $reason = "")
+    public function __construct( $reason = "")
     {
-        parent::__construct($service,"Forbidden", 403,$reason);
+        parent::__construct("Forbidden", 403,$reason);
     }
 
 }

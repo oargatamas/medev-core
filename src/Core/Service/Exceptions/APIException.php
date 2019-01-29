@@ -17,11 +17,6 @@ class APIException extends \Exception
 {
 
     /**
-     * @var string
-     */
-    protected $service;
-
-    /**
      * @var int
      */
     protected $httpStatusCode;
@@ -33,14 +28,12 @@ class APIException extends \Exception
 
     /**
      * APIException constructor.
-     * @param string $service
      * @param string $message
      * @param int $httpStatusCode
      * @param string $reason
      */
-    public function __construct($service = "", $message = "", $httpStatusCode = 500, $reason = "")
+    public function __construct($message = "", $httpStatusCode = 500, $reason = "")
     {
-        $this->service = $service;
         $this->httpStatusCode = $httpStatusCode;
         $this->reasonPhrase = $reason;
         parent::__construct($message, 0, null);
@@ -57,17 +50,9 @@ class APIException extends \Exception
     /**
      * @return string
      */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * @return string
-     */
     public function __toString()
     {
-        return get_class($this) . " - " .$this->getMessage(). " (".$this->httpStatusCode.") - " . $this->reasonPhrase;
+        return  $this->getMessage(). " (".$this->httpStatusCode.") - " . $this->reasonPhrase;
     }
 
 

@@ -9,12 +9,11 @@
 namespace MedevSlim\Core\Service;
 
 
-use MedevSlim\Core\Action\Middleware\RequestLogger;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Logging\LogContainer;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
-use RKA\Middleware\IpAddress;
 use Slim\App;
 use Slim\Interfaces\RouteGroupInterface;
 
@@ -26,7 +25,7 @@ abstract class APIService
 {
 
     /**
-     * @var App
+     * @var MedevApp
      */
     protected $application;
     /**
@@ -42,9 +41,9 @@ abstract class APIService
 
     /**
      * APIService constructor.
-     * @param App $app
+     * @param MedevApp $app
      */
-    public function __construct(App $app)
+    public function __construct(MedevApp $app)
     {
         $this->application = $app;
     }
@@ -128,8 +127,7 @@ abstract class APIService
      * @throws \Exception
      */
     protected function registerMiddlewares(RouteGroupInterface $group){
-        $group->add(new RequestLogger($this));
-        $group->add(new IpAddress());
+
     }
 
 

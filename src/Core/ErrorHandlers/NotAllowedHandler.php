@@ -9,7 +9,7 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
-use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
@@ -22,6 +22,10 @@ use Slim\Http\Response;
  */
 class NotAllowedHandler implements DependencyInjector
 {
+    /**
+     * @var MedevApp
+     */
+    private $app;
 
     /**
      * @var LogContainer
@@ -30,11 +34,12 @@ class NotAllowedHandler implements DependencyInjector
 
     /**
      * PHPRuntimeHandler constructor.
-     * @param LogContainer $logger
+     * @param ContainerInterface $container
      */
-    public function __construct(LogContainer $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->logger = $logger;
+        $this->app = $container->get(MedevApp::class);
+        $this->logger = $container->get(LogContainer::class);
     }
 
     /**
@@ -44,12 +49,22 @@ class NotAllowedHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response, $methods) {
-        $this->logger->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"Method not allowed", [$methods]);
+        $uniqueId = $this->app->getUniqueId();
+        $channel = $this->app->getChannel();
+
+        $logData = [
+            "Allowed methods" => $methods,
+            "Request data" => [
+                $request->getMethod(),
+                (string)$request->getUri()
+            ]
+        ];
+
+        $this->logger->error($channel,$uniqueId,"Method not allowed.", $logData);
 
         return $response
             ->withStatus(405)
-            ->withHeader('Content-Type', 'application/json')
-            ->write(json_encode("Method not allowed"));
+            ->withJson("Method not allowed");
     }
 
     /**
@@ -57,8 +72,8 @@ class NotAllowedHandler implements DependencyInjector
      */
     static function inject(ContainerInterface $container)
     {
-        $container["notAllowedHandler"] = function () use ($container) {
-            return new NotAllowedHandler($container[LogContainer::class]);
+        $container["notAllowedHandler"] = function (ContainerInterface $container){
+            return new NotAllowedHandler($container);
         };
     }
 }

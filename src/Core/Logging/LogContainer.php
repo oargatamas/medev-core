@@ -9,6 +9,7 @@
 namespace MedevSlim\Core\Logging;
 
 
+use MedevSlim\Core\Action\RequestAttribute;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -72,53 +73,59 @@ class LogContainer implements DependencyInjector
     /**
      * @param string $channel
      * @param int $loglevel
+     * @param string $correlationId
      * @param string $message
      * @param array $args
      */
-    public function log($channel, $loglevel, $message, $args)
+    public function log($channel, $loglevel, $correlationId, $message, $args)
     {
         $logger = $this->getLogger($channel);
+        $args[RequestAttribute::CORRELATION_ID] = $correlationId;
         $logger->log($loglevel, $message, $args);
     }
 
     /**
      * @param string $channel
+     * @param string $correlationId
      * @param string $message
      * @param array $args
      */
-    public function debug($channel, $message, $args)
+    public function debug($channel, $correlationId, $message, $args)
     {
-        $this->log($channel, Logger::DEBUG, $message, $args);
+        $this->log($channel, Logger::DEBUG, $correlationId, $message, $args);
     }
 
     /**
      * @param string $channel
+     * @param string $correlationId
      * @param string $message
      * @param array $args
      */
-    public function info($channel, $message, $args)
+    public function info($channel, $correlationId, $message, $args)
     {
-        $this->log($channel, Logger::INFO, $message, $args);
+        $this->log($channel, Logger::INFO, $correlationId, $message, $args);
     }
 
     /**
      * @param string $channel
+     * @param string $correlationId
      * @param string $message
      * @param array $args
      */
-    public function warn($channel, $message, $args)
+    public function warn($channel, $correlationId, $message, $args)
     {
-        $this->log($channel, Logger::WARNING, $message, $args);
+        $this->log($channel, Logger::WARNING, $correlationId, $message, $args);
     }
 
     /**
      * @param string $channel
+     * @param string $correlationId
      * @param string $message
      * @param array $args
      */
-    public function error($channel, $message, $args)
+    public function error($channel, $correlationId, $message, $args)
     {
-        $this->log($channel, Logger::ERROR, $message, $args);
+        $this->log($channel, Logger::ERROR, $correlationId, $message, $args);
     }
 
     /**

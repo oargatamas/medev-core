@@ -17,12 +17,11 @@ class UnauthorizedException extends APIException
 {
     /**
      * UnauthorizedException constructor.
-     * @param string $service
      * @param string $reason
      */
-    public function __construct($service = "", $reason = "")
+    public function __construct( $reason = "")
     {
-        parent::__construct($service,"Unauthorized", 401,$reason);
+        parent::__construct("Unauthorized", 401,$reason);
     }
 
 }

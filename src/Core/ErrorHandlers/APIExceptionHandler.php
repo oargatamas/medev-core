@@ -10,7 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 
-use MedevSlim\Core\Action\RequestAttribute;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Service\Exceptions\APIException;
@@ -28,7 +28,13 @@ class APIExceptionHandler extends Error implements DependencyInjector
     /**
      * @var LogContainer
      */
-    private $logContainer;
+    private $logger;
+
+
+    /**
+     * @var MedevApp
+     */
+    private $app;
 
     /**
      * PHPRuntimeHandler constructor.
@@ -37,7 +43,8 @@ class APIExceptionHandler extends Error implements DependencyInjector
      */
     public function __construct(ContainerInterface $container,$displayErrorDetails)
     {
-        $this->logContainer = $container->get(LogContainer::class);
+        $this->app = $container->get(MedevApp::class);
+        $this->logger = $container->get(LogContainer::class);
         parent::__construct($displayErrorDetails);
     }
 
@@ -50,14 +57,21 @@ class APIExceptionHandler extends Error implements DependencyInjector
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
-        $this->logContainer->error($request->getAttribute(RequestAttribute::HANDLER_SERVICE),"APIException raised", [$exception->__toString()]);
+        $uniqueId = $this->app->getUniqueId();
+        $channel = $this->app->getChannel();
+
+
+        $this->logger->error($channel,$uniqueId,"APIException raised", [$exception->__toString()]);
 
         $statusCode = 500;
         if($exception instanceof APIException){
             $statusCode = $exception->getHTTPStatus();
         }
 
+        var_dump($request);
+
         $response->getBody()->write($this->renderJsonErrorMessage($exception));
+        //$response->getBody()->write(json_encode($request);
 
         return $response
             ->withStatus($statusCode)
@@ -69,7 +83,7 @@ class APIExceptionHandler extends Error implements DependencyInjector
      */
     static function inject(ContainerInterface $container)
     {
-        $container["errorHandler"] = function () use ($container) {
+        $container["errorHandler"] = function (ContainerInterface $container){
             return new APIExceptionHandler($container,$container->get('settings')['displayErrorDetails']);
         };
     }

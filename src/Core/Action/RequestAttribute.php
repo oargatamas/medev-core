@@ -14,7 +14,6 @@ class RequestAttribute
     const IP_ADDRESS = "ip_address";
     const SCOPES = "Scopes";
     const CORRELATION_ID = "Correlation Id";
-    const HANDLER_SERVICE = "Handler Service";
     const RESPONSE_DATA = "Response Data";
     const INITIATOR = "Initiator";
     const URI = "URI";

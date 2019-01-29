@@ -10,9 +10,8 @@ namespace MedevSlim\Core\Action\Middleware;
 
 
 use MedevSlim\Core\Action\RequestAttribute;
-use MedevSlim\Core\Service\APIService;
-use MedevSlim\Utils\UUID\UUID;
-use Monolog\Logger;
+use MedevSlim\Core\Application\MedevApp;
+use MedevSlim\Core\Logging\LogContainer;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -22,25 +21,26 @@ use Slim\Http\Response;
  */
 class RequestLogger
 {
-    /**
-     * @var APIService
-     */
-    private $service;
 
     /**
-     * @var Logger
+     * @var MedevApp
+     */
+    private $app;
+
+    /**
+     * @var LogContainer
      */
     private $logger;
 
+
     /**
      * RequestLogger constructor.
-     * @param APIService $service
-     * @throws \Exception
+     * @param MedevApp $app
      */
-    public function __construct(APIService $service)
+    public function __construct(MedevApp $app)
     {
-        $this->service = $service;
-        $this->logger = $service->getLogger();
+        $this->app = $app;
+        $this->logger = $app->getLogContainer();
     }
 
 
@@ -52,32 +52,31 @@ class RequestLogger
      */
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        //Todo move labels to constants
-        $uniqueId = UUID::v4();
+        $uniqueId = $this->app->getUniqueId();
+        $channel = $this->app->getChannel();
+
+
         $inboundLogData = [
-            RequestAttribute::CORRELATION_ID => $uniqueId,
             RequestAttribute::INITIATOR => $request->getAttribute(RequestAttribute::IP_ADDRESS),
-            RequestAttribute::URI => $request->getUri(),
+            RequestAttribute::URI => (string)$request->getUri(),
             RequestAttribute::METHOD => $request->getMethod(),
-            RequestAttribute::REQUEST_PARAMS => $request->getParams()
+            RequestAttribute::REQUEST_PARAMS => $request->getParams(),
         ];
 
-        $this->logger->info("Inbound request data: ",$inboundLogData);
 
+        $this->logger->info($channel, $uniqueId,"Inbound request data: ",$inboundLogData);
 
         $attributes = [
-            RequestAttribute::HANDLER_SERVICE => $this->service->getServiceName(),
-            RequestAttribute::CORRELATION_ID => $uniqueId,
+            RequestAttribute::CORRELATION_ID => $uniqueId
         ];
 
         /** @var Response $finalResponse */
         $finalResponse = $next($request->withAttributes($attributes), $response);
 
         $outgoingLogData = [
-            RequestAttribute::CORRELATION_ID => $uniqueId,
             RequestAttribute::RESPONSE_DATA => $finalResponse->__toString()
         ];
-        $this->logger->info("Outbound response data: ",$outgoingLogData);
+        $this->logger->info($channel, $uniqueId,"Outbound response data: ",$outgoingLogData);
 
         return $finalResponse;
     }
