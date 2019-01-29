@@ -11,6 +11,7 @@ namespace MedevSlim\Core\Logging;
 
 use MedevSlim\Core\Action\RequestAttribute;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -42,7 +43,10 @@ class LogContainer implements DependencyInjector
     {
         $this->loggers = [];
         $logger = new Logger(self::DEFAULT_LOGGER_CHANNEL);
-        $logger->pushHandler(new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . self::DEFAULT_LOGGER_CHANNEL . ".log", Logger::DEBUG));
+        $handler = new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . self::DEFAULT_LOGGER_CHANNEL . ".log", Logger::DEBUG);
+        $formatter = new LineFormatter(self::LOG_FILE_FORMAT);
+        $handler->setFormatter($formatter);
+        $logger->pushHandler($handler);
         $this->defaultLogger = $logger;
     }
 
