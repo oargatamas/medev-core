@@ -30,7 +30,7 @@ abstract class APIService
      */
     protected $application;
     /**
-     * @var Logger
+     * @var LogContainer
      */
     protected $logger;
 
@@ -48,14 +48,6 @@ abstract class APIService
     public function __construct(MedevApp $app)
     {
         $this->application = $app;
-
-        $logger = new Logger($this->getServiceName());
-        $handler = new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . $this->getServiceName() . ".log", $this->logLevel);
-        $formatter = new LineFormatter(LogContainer::LOG_FILE_FORMAT);
-        $handler->setFormatter($formatter);
-        $logger->pushHandler($handler);
-
-        $this->logger = $logger;
     }
 
     /**
@@ -88,7 +80,7 @@ abstract class APIService
     }
 
     /**
-     * @return Logger
+     * @return LogContainer
      * @throws \Exception
      */
     public function getLogger()
@@ -141,9 +133,15 @@ abstract class APIService
      * @throws \Exception
      */
     protected function registerContainerComponents(ContainerInterface $container){
-        /** @var LogContainer $logContainer */
-        $logContainer = $container->get(LogContainer::class);
-        $logContainer->addLogger($this->getLogger());
+        $this->logger = $container->get(LogContainer::class);
+
+        $logger = new Logger($this->getServiceName());
+        $handler = new StreamHandler($_SERVER['DOCUMENT_ROOT'] . "/../log/" . $this->getServiceName() . ".log", $this->logLevel);
+        $formatter = new LineFormatter(LogContainer::LOG_FILE_FORMAT);
+        $handler->setFormatter($formatter);
+        $logger->pushHandler($handler);
+
+        $this->logger->addLogger($logger);
     }
 
 }

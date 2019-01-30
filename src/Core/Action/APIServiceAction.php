@@ -9,8 +9,8 @@
 namespace MedevSlim\Core\Action;
 
 
+use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Service\APIService;
-use Monolog\Logger;
 
 
 /**
@@ -26,7 +26,7 @@ abstract class APIServiceAction
 
 
     /**
-     * @var Logger
+     * @var LogContainer
      */
     protected $logger;
 
