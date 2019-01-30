@@ -50,8 +50,8 @@ class PHPRuntimeHandler implements DependencyInjector
      * @return Response
      */
     public function __invoke(Request $request, Response $response, $exception) {
-        $uniqueId = $this->app->getUniqueId();
-        $channel = $this->app->getChannel();
+        $uniqueId = $this->app->getRequestId();
+        $channel = $this->app->getLogChannel();
 
         $this->logger->error($channel,$uniqueId,"Error during request handling: ". (string)$exception);
 

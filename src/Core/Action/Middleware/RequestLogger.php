@@ -52,8 +52,8 @@ class RequestLogger
      */
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $uniqueId = $this->app->getUniqueId();
-        $channel = $this->app->getChannel();
+        $uniqueId = $this->app->getRequestId();
+        $channel = $this->app->getLogChannel();
 
 
         $inboundLogData = [

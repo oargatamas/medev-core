@@ -12,6 +12,7 @@ namespace MedevSlim\Core\Application;
 use MedevSlim\Core\Action\Middleware\RequestLogger;
 use MedevSlim\Core\ErrorHandlers\ErrorHandlers;
 use MedevSlim\Core\Logging\LogContainer;
+use MedevSlim\Core\Logging\RequestInfo;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Utils\UUID\UUID;
 use Psr\Container\ContainerInterface;
@@ -26,22 +27,13 @@ use Slim\Router;
  */
 class MedevApp extends App
 {
+    use RequestInfo;
+
     const REQUEST_ID = "uniqueId";
     const LOG_CHANNEL = "logChannel";
     const REQUEST = "request";
     const RESPONSE = "response";
     const ROUTER = "router";
-
-
-    /**
-     * @var string
-     */
-    private $uniqueId;
-    /**
-     * @var string
-     */
-    private $channel;
-
 
     /**
      * MedevApp constructor.
@@ -71,8 +63,8 @@ class MedevApp extends App
      */
     public function run($silent = false)
     {
-        $this->uniqueId = $this->generateRequestUniqueId();
-        $this->channel = $this->findRequestChannel();
+        $this->requestId = $this->generateRequestUniqueId();
+        $this->logChannel = $this->findRequestChannel();
         return parent::run($silent);
     }
 
@@ -125,17 +117,17 @@ class MedevApp extends App
     /**
      * @return string
      */
-    public function getUniqueId()
+    public function getRequestId()
     {
-        return $this->uniqueId;
+        return $this->requestId;
     }
 
     /**
      * @return string
      */
-    public function getChannel()
+    public function getLogChannel()
     {
-        return $this->channel;
+        return $this->logChannel;
     }
 
 }

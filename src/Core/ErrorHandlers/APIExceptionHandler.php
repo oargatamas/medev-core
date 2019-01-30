@@ -57,8 +57,8 @@ class APIExceptionHandler extends Error implements DependencyInjector
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $exception)
     {
-        $uniqueId = $this->app->getUniqueId();
-        $channel = $this->app->getChannel();
+        $uniqueId = $this->app->getRequestId();
+        $channel = $this->app->getLogChannel();
 
 
         $this->logger->error($channel,$uniqueId,"Exception during request: ".$exception->__toString()."\n StackTrace: ".$exception->getTraceAsString());

@@ -11,6 +11,7 @@ namespace MedevSlim\Core\Service;
 
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Logging\LogContainer;
+use MedevSlim\Core\Logging\RequestInfo;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -24,7 +25,7 @@ use Slim\Interfaces\RouteGroupInterface;
  */
 abstract class APIService
 {
-
+    use RequestInfo;
     /**
      * @var MedevApp
      */
@@ -40,6 +41,7 @@ abstract class APIService
     protected $logLevel;
 
 
+
     /**
      * APIService constructor.
      * @param MedevApp $app
@@ -48,6 +50,8 @@ abstract class APIService
     public function __construct(MedevApp $app)
     {
         $this->application = $app;
+        $this->requestId = $app->getRequestId();
+        $this->logChannel = $app->getLogChannel();
     }
 
     /**
@@ -63,21 +67,6 @@ abstract class APIService
      */
     public abstract function getServiceName();
 
-    /**
-     * @return ContainerInterface
-     */
-    public function getServiceContainer(){
-        return $this->application->getContainer();
-    }
-
-
-    /**
-     * @param string $component
-     * @return mixed
-     */
-    public function getServiceContainerComponent($component){
-        return $this->application->getContainer()->get($component);
-    }
 
     /**
      * @return LogContainer
@@ -96,6 +85,8 @@ abstract class APIService
         $this->logger = $logger;
     }
 
+
+
     /**
      * @param string $baseUrl
      * @throws \Exception
@@ -108,7 +99,7 @@ abstract class APIService
 
         $this->registerContainerComponents($container);
 
-        $group = $app->group($baseUrl, function()use ($app,$service){
+        $group = $app->group($baseUrl, function () use ($app, $service) {
             $service->registerRoutes($app); //Itt a "this" nem az APIService hanem ahol meghívódik a függvény
         });
         $this->registerMiddlewares($group);
@@ -123,8 +114,9 @@ abstract class APIService
      * @param RouteGroupInterface $group
      * @throws \Exception
      */
-    protected function registerMiddlewares(RouteGroupInterface $group){
-
+    protected function registerMiddlewares(RouteGroupInterface $group)
+    {
+        //Do nothing. Override it to add middlewares to the group
     }
 
 
@@ -132,7 +124,8 @@ abstract class APIService
      * @param ContainerInterface $container
      * @throws \Exception
      */
-    protected function registerContainerComponents(ContainerInterface $container){
+    protected function registerContainerComponents(ContainerInterface $container)
+    {
         $this->logger = $container->get(LogContainer::class);
 
         $logger = new Logger($this->getServiceName());
@@ -143,5 +136,4 @@ abstract class APIService
 
         $this->logger->addLogger($logger);
     }
-
 }

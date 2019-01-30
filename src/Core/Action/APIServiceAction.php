@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Action;
 
 
 use MedevSlim\Core\Logging\LogContainer;
+use MedevSlim\Core\Logging\RequestInfo;
 use MedevSlim\Core\Service\APIService;
 
 
@@ -19,6 +20,7 @@ use MedevSlim\Core\Service\APIService;
  */
 abstract class APIServiceAction
 {
+    use RequestInfo;
     /**
      * @var APIService
      */
@@ -30,6 +32,7 @@ abstract class APIServiceAction
      */
     protected $logger;
 
+
     /**
      * APIServiceAction constructor.
      * @param APIService $service
@@ -39,6 +42,8 @@ abstract class APIServiceAction
     {
         $this->service = $service;
         $this->logger = $service->getLogger();
+        $this->requestId = $service->getRequestId();
+        $this->logChannel = $service->getLogChannel();
     }
 
     /**
