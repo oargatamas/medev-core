@@ -28,9 +28,9 @@ class ScopeValidator
 
     /**
      * ScopeValidator constructor.
-     * @param array|null $requiredScopes
+     * @param string[] $requiredScopes
      */
-    public function __construct(array $requiredScopes = null)
+    public function __construct($requiredScopes)
     {
         $this->requiredScopes = $requiredScopes;
     }
@@ -47,31 +47,26 @@ class ScopeValidator
     {
         $scopesInRequest = $request->getAttribute(RequestAttribute::SCOPES,[]);
         if(!$this->hasPermission($scopesInRequest)){
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("The following scope(s) needed for action [".implode(", ",$this->requiredScopes)."], but those found in request [".implode(", ",$scopesInRequest)."].");
         }
         return $next($request, $response);
     }
 
 
     /**
-     * @param $permissionsFromClient
+     * @param string[] $scopesFromClient
      * @return bool
      */
-    private function hasPermission($permissionsFromClient)
+    private function hasPermission($scopesFromClient)
     {
-        if (empty($this->permissions)) { //If we did not set any permission, then we are Authorised! :)
+        if (empty($this->requiredScopes)) { //If we did not set any permission, then we are Authorized! :)
             return true;
         }
 
-        foreach ($permissionsFromClient as $clientScope){
-            foreach ($this->permissions as $requiredScope){
-                if($clientScope === $requiredScope){
-                    return true; // We found the matching permission id -> Authorised request!
-                }
-            }
+        if(empty(array_diff($this->requiredScopes,$scopesFromClient))){
+            return true; //We found all the matching scopes -> Authorized request!
         }
 
-        //we had no case when we can return with true -> Unauthorised request!
-        return false;
+        return false; //We had no case when we can return with true -> Unauthorized request!
     }
 }
