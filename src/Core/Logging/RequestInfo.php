@@ -16,11 +16,11 @@ namespace MedevSlim\Core\Logging;
 trait RequestInfo
 {
     /**
-     * @var
+     * @var string
      */
     protected $requestId;
     /**
-     * @var
+     * @var string
      */
     protected $logChannel;
 
