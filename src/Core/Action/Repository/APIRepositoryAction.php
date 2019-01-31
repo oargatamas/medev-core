@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Action\Repository;
 
 
 use MedevSlim\Core\Action\APIServiceAction;
+use MedevSlim\Core\Database\MedevDatabase;
 use MedevSlim\Core\Service\APIService;
 use Medoo\Medoo;
 
@@ -27,12 +28,12 @@ abstract class APIRepositoryAction extends APIServiceAction
     /**
      * APIRepositoryAction constructor.
      * @param APIService $service
-     * @param Medoo $database
+     * @throws \Exception
      */
-    public function __construct(APIService $service, Medoo $database)
+    public function __construct(APIService $service)
     {
         parent::__construct($service);
-        $this->database= $database;
+        $this->database= $service->getContainer()->get(MedevDatabase::class);
     }
 
     /**
