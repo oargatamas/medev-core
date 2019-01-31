@@ -55,6 +55,13 @@ abstract class APIService
     }
 
     /**
+     * @return ContainerInterface
+     */
+    public function getContainer(){
+        return $this->application->getContainer();
+    }
+
+    /**
      * @param int $logLevel
      */
     public function setLogLevel($logLevel)
