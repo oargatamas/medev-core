@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Service;
 
 
 use MedevSlim\Core\Application\MedevApp;
+use MedevSlim\Core\Logging\ComponentLogger;
 use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Logging\RequestInfo;
 use Monolog\Formatter\LineFormatter;
@@ -23,7 +24,7 @@ use Slim\Interfaces\RouteGroupInterface;
  * Class APIService
  * @package MedevSlim\Core\Service
  */
-abstract class APIService
+abstract class APIService implements ComponentLogger
 {
     use RequestInfo;
     /**
@@ -33,7 +34,7 @@ abstract class APIService
     /**
      * @var LogContainer
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var int
@@ -92,6 +93,37 @@ abstract class APIService
         $this->logger = $logger;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function debug($message, $args = [])
+    {
+        $this->logger->debug($this->logChannel,$this->requestId,$message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function info($message, $args = [])
+    {
+        $this->logger->info($this->logChannel,$this->requestId,$message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function warn($message, $args = [])
+    {
+        $this->logger->warn($this->logChannel,$this->requestId,$message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function error($message, $args = [])
+    {
+        $this->logger->error($this->logChannel,$this->requestId,$message,$args);
+    }
 
 
     /**

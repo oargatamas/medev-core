@@ -9,8 +9,7 @@
 namespace MedevSlim\Core\Action;
 
 
-use MedevSlim\Core\Logging\LogContainer;
-use MedevSlim\Core\Logging\RequestInfo;
+use MedevSlim\Core\Logging\ComponentLogger;
 use MedevSlim\Core\Service\APIService;
 
 
@@ -18,20 +17,12 @@ use MedevSlim\Core\Service\APIService;
  * Class APIServiceAction
  * @package MedevSlim\Core\Action
  */
-abstract class APIServiceAction
+abstract class APIServiceAction implements ComponentLogger
 {
-    use RequestInfo;
     /**
      * @var APIService
      */
     protected $service;
-
-
-    /**
-     * @var LogContainer
-     */
-    protected $logger;
-
 
     /**
      * APIServiceAction constructor.
@@ -41,10 +32,40 @@ abstract class APIServiceAction
     public function __construct(APIService $service)
     {
         $this->service = $service;
-        $this->logger = $service->getLogger();
-        $this->requestId = $service->getRequestId();
-        $this->logChannel = $service->getLogChannel();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function debug($message, $args = [])
+    {
+        $this->service->debug($message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function info($message, $args = [])
+    {
+        $this->service->info($message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function warn($message, $args = [])
+    {
+        $this->service->warn($message,$args);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function error($message, $args = [])
+    {
+        $this->service->error($message,$args);
+    }
+
 
     /**
      * @return string[]
