@@ -9,7 +9,9 @@
 namespace MedevSlim\Core\Database;
 
 
-abstract class MedevDatabase
+use MedevSlim\Core\DependencyInjection\DependencyInjector;
+
+abstract class MedevDatabase implements DependencyInjector
 {
     //We just need the name of the class to use in the DIC component key (MedevDatabase::class)
 }
