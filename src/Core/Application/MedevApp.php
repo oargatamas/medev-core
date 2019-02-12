@@ -48,9 +48,12 @@ class MedevApp extends App
         $instance = $this;
 
         $container[self::class] = function () use($instance){return $instance;};
-        MedooDatabase::inject($container);
         LogContainer::inject($container);
         ErrorHandlers::inject($container);
+
+        if(isset($config["database"])){
+            MedooDatabase::inject($container);
+        }
 
         $this->add(new RequestLogger($this));
         $this->add(new IpAddress());
