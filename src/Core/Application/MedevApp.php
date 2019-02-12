@@ -37,11 +37,11 @@ class MedevApp extends App
 
     /**
      * MedevApp constructor.
-     * @param array $container
+     * @param array $config
      */
-    public function __construct($container = [])
+    public function __construct($config = [])
     {
-        parent::__construct($container);
+        parent::__construct(["settings" => $config]);
         $container = $this->getContainer();
 
         $instance = $this;
