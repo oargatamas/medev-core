@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Application;
 
 
 use MedevSlim\Core\Action\Middleware\RequestLogger;
+use MedevSlim\Core\Database\Medoo\MedooDatabase;
 use MedevSlim\Core\ErrorHandlers\ErrorHandlers;
 use MedevSlim\Core\Logging\LogContainer;
 use MedevSlim\Core\Logging\RequestInfo;
@@ -47,6 +48,7 @@ class MedevApp extends App
         $instance = $this;
 
         $container[self::class] = function () use($instance){return $instance;};
+        MedooDatabase::inject($container);
         LogContainer::inject($container);
         ErrorHandlers::inject($container);
 
