@@ -19,7 +19,8 @@
   },
   "autoload": {
     "psr-4": {
-      "MedevSlim\\": "src/"
+      "MedevSlim\\": "src/",
+      "MedevSlimExample\\" : "example/src/"
     }
   }
 }
