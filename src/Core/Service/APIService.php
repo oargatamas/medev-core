@@ -63,6 +63,13 @@ abstract class APIService implements ComponentLogger
     }
 
     /**
+     * @return array
+     */
+    public function getConfiguration(){
+        return $this->application->getConfiguration();
+    }
+
+    /**
      * @param int $logLevel
      */
     public function setLogLevel($logLevel)

@@ -60,6 +60,7 @@ class MedevApp extends App
     }
 
 
+
     /**
      * @param bool $silent
      * @return \Psr\Http\Message\ResponseInterface
@@ -79,6 +80,14 @@ class MedevApp extends App
      */
     protected function generateRequestUniqueId(){
         return UUID::v4();
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getConfiguration(){
+        return $this->getContainer()->get("settings");
     }
 
     /**

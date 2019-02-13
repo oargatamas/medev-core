@@ -25,6 +25,11 @@ abstract class APIServiceAction implements ComponentLogger
     protected $service;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * APIServiceAction constructor.
      * @param APIService $service
      * @throws \Exception
@@ -32,6 +37,7 @@ abstract class APIServiceAction implements ComponentLogger
     public function __construct(APIService $service)
     {
         $this->service = $service;
+        $this->config = $service->getConfiguration();
     }
 
     /**
