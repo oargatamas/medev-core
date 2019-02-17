@@ -52,7 +52,7 @@ abstract class APIService implements ComponentLogger
     {
         $this->application = $app;
         $this->requestId = $app->getRequestId();
-        $this->logChannel = $app->getLogChannel();
+        $this->logChannel = $this->getServiceName();
     }
 
     /**
