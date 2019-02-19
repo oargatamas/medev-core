@@ -9,13 +9,13 @@
 namespace MedevSlim\Core\Action\Servlet\Session;
 
 
-use MedevSlim\Core\Action\Servlet\APIServletAction;
+use MedevSlim\Core\Action\Servlet\APIServlet;
 
 /**
- * Class APISessionServletAction
+ * Class APISessionServlet
  * @package MedevSlim\Core\Action\Servlet\Session
  */
-abstract class APISessionServletAction extends APIServletAction
+abstract class APISessionServlet extends APIServlet
 {
 
     /**

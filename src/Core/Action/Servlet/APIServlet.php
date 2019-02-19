@@ -15,14 +15,15 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
- * Class APIServletAction
+ * Class APIServlet
  * @package MedevSlim\Core\Action\Servlet
  */
-abstract class APIServletAction extends APIServiceAction
+abstract class APIServlet extends APIServiceAction
 {
     /**
-     * APIServletAction constructor.
+     * APIServlet constructor.
      * @param APIService $service
+     * @throws \Exception
      */
     public function __construct(APIService $service)
     {
