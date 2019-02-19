@@ -21,7 +21,6 @@ use Twig\Loader\FilesystemLoader;
  */
 abstract class TwigAPIService extends APIService
 {
-
     /**
      * @inheritDoc
      */
@@ -31,7 +30,8 @@ abstract class TwigAPIService extends APIService
 
         /** @var FilesystemLoader $viewloader */
         $viewLoader = $container->get(TwigView::loader);
-        $viewLoader->addPath(__DIR__."/View",$this->getServiceName());
-
+        $viewLoader->addPath($this->getTemplatePath(),$this->getServiceName());
     }
+
+    protected abstract function getTemplatePath();
 }
