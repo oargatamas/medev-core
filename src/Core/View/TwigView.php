@@ -26,18 +26,20 @@ class TwigView implements DependencyInjector
      */
     static function inject(ContainerInterface $container)
     {
-        $container[TwigView::loader] = function (){
-            return new FilesystemLoader("view");
+        $defaultLayoutPath = $_SERVER["DOCUMENT_ROOT"]."/../res/views";
+
+        $container[TwigView::loader] = function () use($defaultLayoutPath){
+            return new FilesystemLoader($defaultLayoutPath);
         };
 
-        $container[TwigView::class] = function() use($container){
-            $view = new Twig("");
+        $container[TwigView::class] = function() use($container, $defaultLayoutPath){
+            $view = new Twig($defaultLayoutPath);
 
             // Instantiate and add Slim specific extension
             $router = $container->get('router');
             $uri = Uri::createFromEnvironment(new Environment($_SERVER));
             $view->addExtension(new TwigExtension($router, $uri));
-            $view->getEnvironment()->setLoader($container->get("view_loader"));
+            $view->getEnvironment()->setLoader($container->get(TwigView::loader));
 
             return $view;
         };
