@@ -57,6 +57,9 @@ class MedevApp extends App
 
         $this->add(new RequestLogger($this));
         $this->add(new IpAddress());
+
+        $this->requestId = $this->generateRequestUniqueId();
+        $this->logChannel = $this->findRequestChannel();
     }
 
 
@@ -69,8 +72,6 @@ class MedevApp extends App
      */
     public function run($silent = false)
     {
-        $this->requestId = $this->generateRequestUniqueId();
-        $this->logChannel = $this->findRequestChannel();
         return parent::run($silent);
     }
 
