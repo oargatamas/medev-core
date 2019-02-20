@@ -40,5 +40,5 @@ abstract class APIRepositoryAction extends APIServiceAction
      * @param $args
      * @return mixed
      */
-    public abstract function handleRequest($args);
+    public abstract function handleRequest($args = []);
 }
