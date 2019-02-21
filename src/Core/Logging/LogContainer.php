@@ -23,7 +23,7 @@ use Psr\Container\ContainerInterface;
 class LogContainer implements DependencyInjector
 {
     const DEFAULT_LOGGER_CHANNEL = "ApplicationDefault";
-    const LOG_FILE_FORMAT = "[%datetime%][%channel%][%context.CorrelationId%][%level_name%] %message%\n";
+    const LOG_FILE_FORMAT = "[%datetime%][%context.CorrelationId%][%level_name%][%channel%][%context.action%] %message%\n";
 
     /**
      * @var Logger[]

@@ -19,6 +19,11 @@ use MedevSlim\Core\Service\APIService;
  */
 abstract class APIServiceAction implements ComponentLogger
 {
+    const ACTION_NAME = "action";
+    /**
+     * @var string
+     */
+    protected $actionName;
     /**
      * @var APIService
      */
@@ -37,6 +42,7 @@ abstract class APIServiceAction implements ComponentLogger
     public function __construct(APIService $service)
     {
         $this->service = $service;
+        $this->actionName = substr(strrchr(get_called_class(), '\\'), 1);
         $this->config = $service->getConfiguration();
     }
 
@@ -45,6 +51,7 @@ abstract class APIServiceAction implements ComponentLogger
      */
     public function debug($message, $args = [])
     {
+        $args[self::ACTION_NAME] = $this->actionName;
         $this->service->debug($message,$args);
     }
 
@@ -53,6 +60,7 @@ abstract class APIServiceAction implements ComponentLogger
      */
     public function info($message, $args = [])
     {
+        $args[self::ACTION_NAME] = $this->actionName;
         $this->service->info($message,$args);
     }
 
@@ -61,6 +69,7 @@ abstract class APIServiceAction implements ComponentLogger
      */
     public function warn($message, $args = [])
     {
+        $args[self::ACTION_NAME] = $this->actionName;
         $this->service->warn($message,$args);
     }
 
@@ -69,6 +78,7 @@ abstract class APIServiceAction implements ComponentLogger
      */
     public function error($message, $args = [])
     {
+        $args[self::ACTION_NAME] = $this->actionName;
         $this->service->error($message,$args);
     }
 
