@@ -14,7 +14,8 @@
     "catfan/medoo": "^1.5",
     "ext-json": "^1.6",
     "monolog/monolog": "^1.23",
-    "akrabat/ip-address-middleware": "^1.0"
+    "akrabat/ip-address-middleware": "^1.0",
+    "slim/twig-view": "^2.4"
   },
   "autoload": {
     "psr-4": {
