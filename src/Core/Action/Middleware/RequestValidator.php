@@ -22,7 +22,7 @@ class RequestValidator
     /**
      * @var string[]
      */
-    private $requiredParams;
+    protected $requiredParams;
 
     /**
      * RequestValidator constructor.
