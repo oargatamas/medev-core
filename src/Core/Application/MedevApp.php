@@ -36,6 +36,17 @@ class MedevApp extends App
     const RESPONSE = "response";
     const ROUTER = "router";
 
+
+    /**
+     * @param string $pathToConfig
+     * @return MedevApp
+     */
+    public static function fromJsonFile($pathToConfig){
+        $configJson = file_get_contents($pathToConfig);
+        $config = json_decode($configJson,true);
+        return new MedevApp($config);
+    }
+
     /**
      * MedevApp constructor.
      * @param array $config
