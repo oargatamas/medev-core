@@ -10,9 +10,11 @@ namespace MedevSlim\Core\Action\Servlet;
 
 
 use MedevSlim\Core\Action\APIServiceAction;
+use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\Service\APIService;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Interfaces\RouterInterface;
 
 /**
  * Class APIServlet
@@ -21,12 +23,18 @@ use Slim\Http\Response;
 abstract class APIServlet extends APIServiceAction
 {
     /**
+     * @var RouterInterface
+     */
+    protected $router;
+
+    /**
      * APIServlet constructor.
      * @param APIService $service
      * @throws \Exception
      */
     public function __construct(APIService $service)
     {
+        $this->router = $service->getContainer()->get(MedevApp::ROUTER);
         parent::__construct($service);
     }
 
