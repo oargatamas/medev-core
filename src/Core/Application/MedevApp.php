@@ -117,7 +117,7 @@ class MedevApp extends App
 
         foreach ($router->getRoutes() as $route){
             if ($route->getPattern() === $url){
-                return explode(".", $route->getName(), 2)[0];
+                return $route->getArgument(APIService::SERVICE_ID);
             }
         }
 

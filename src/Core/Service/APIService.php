@@ -26,6 +26,8 @@ use Slim\Interfaces\RouteGroupInterface;
  */
 abstract class APIService implements ComponentLogger
 {
+    const SERVICE_ID = "service_name";
+
     use RequestInfo;
     /**
      * @var MedevApp
@@ -81,15 +83,6 @@ abstract class APIService implements ComponentLogger
      * @return mixed
      */
     public abstract function getServiceName();
-
-
-    /**
-     * @param string $routeName
-     * @return string
-     */
-    public function createServiceRouteName($routeName){
-        return $this->getServiceName().".".$routeName;
-    }
 
 
 
