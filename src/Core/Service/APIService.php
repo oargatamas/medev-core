@@ -87,9 +87,10 @@ abstract class APIService implements ComponentLogger
      * @param string $routeName
      * @return string
      */
-    public function nameServiceRoute($routeName){
+    public function createServiceRouteName($routeName){
         return $this->getServiceName().".".$routeName;
     }
+
 
 
     /**
