@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 
 class MedooDatabase extends MedevDatabase
 {
-
+    const DEFAULT_DATE_FORMAT = "YYYY-MM-DD HH:MM:SS";
     /**
      * @param ContainerInterface $container
      */
