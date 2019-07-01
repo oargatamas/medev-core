@@ -15,11 +15,10 @@ namespace MedevSlim\Core\Service\Exceptions;
 class NotFoundException extends APIException
 {
     /**
-     * NotFoundException constructor.
-     * @param string $reason
+     * @inheritDoc
      */
-    public function __construct($reason = "")
+    public function __construct($reason = "", $replicateReasonAsMessage = false)
     {
-        parent::__construct("Resource Not Found", 404,$reason);
+        parent::__construct("Resource Not Found", 404,$reason, $replicateReasonAsMessage);
     }
 }

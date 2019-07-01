@@ -13,7 +13,7 @@ namespace MedevSlim\Core\Service\Exceptions;
  * Class APIException
  * @package MedevSlim\Core\Service\Exceptions
  */
-class APIException extends \Exception
+abstract class APIException extends \Exception
 {
 
     /**
@@ -31,12 +31,13 @@ class APIException extends \Exception
      * @param string $message
      * @param int $httpStatusCode
      * @param string $reason
+     * @param bool $replicateReasonAsMessage
      */
-    public function __construct($message = "", $httpStatusCode = 500, $reason = "")
+    public function __construct($message = "", $httpStatusCode = 500, $reason = "", $replicateReasonAsMessage = false)
     {
         $this->httpStatusCode = $httpStatusCode;
         $this->reasonPhrase = $reason;
-        parent::__construct($message, 0, null);
+        parent::__construct($replicateReasonAsMessage ? $reason : $message, 0, null);
     }
 
     /**

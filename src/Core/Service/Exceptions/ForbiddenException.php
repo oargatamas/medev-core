@@ -16,12 +16,11 @@ namespace MedevSlim\Core\Service\Exceptions;
 class ForbiddenException extends APIException
 {
     /**
-     * ForbiddenException constructor.
-     * @param string $reason
+     * @inheritDoc
      */
-    public function __construct( $reason = "")
+    public function __construct( $reason = "", $replicateReasonAsMessage = false)
     {
-        parent::__construct("Forbidden", 403,$reason);
+        parent::__construct("Forbidden", 403,$reason, $replicateReasonAsMessage);
     }
 
 }
