@@ -14,9 +14,10 @@ $configJson = file_get_contents(__DIR__."/../config/config.json");
 $config = json_decode($configJson,true);
 
 $application = new MedevApp($config);
+\MedevSlim\Core\View\TwigView::inject($application->getContainer());
 
 $service = new DummyService($application);
-$service->registerService("test");
+$service->registerService("/test");
 
 //registering other services or application middlewares....
 

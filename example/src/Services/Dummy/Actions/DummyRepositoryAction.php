@@ -18,7 +18,7 @@ class DummyRepositoryAction extends APIRepositoryAction
      * @param $args
      * @return mixed
      */
-    public function handleRequest($args)
+    public function handleRequest($args = [])
     {
         //examples for logging:
         $this->debug("Debug message");
@@ -32,4 +32,5 @@ class DummyRepositoryAction extends APIRepositoryAction
 
         return ["result" => "nothing"];
     }
+
 }

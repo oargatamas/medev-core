@@ -9,13 +9,12 @@
 namespace MedevSlimExample\Services\Dummy;
 
 
-use MedevSlim\Core\Action\Middleware\RequestValidator;
-use MedevSlim\Core\Action\Middleware\ScopeValidator;
 use MedevSlim\Core\Service\APIService;
-use MedevSlimExample\Services\Dummy\Actions\DummyHTTPAction;
+use MedevSlim\Core\Service\View\TwigAPIService;
+use MedevSlimExample\Services\Dummy\Actions\DummyHTTP;
 use Slim\App;
 
-class DummyService extends APIService
+class DummyService extends TwigAPIService
 {
 
     /**
@@ -28,6 +27,7 @@ class DummyService extends APIService
 
     /**
      * @param App $app
+     * @throws \Exception
      */
     protected function registerRoutes(App $app)
     {
@@ -39,9 +39,15 @@ class DummyService extends APIService
         $this->error("Error message");
 
 
-        $app->get("/dummy", new DummyHTTPAction($this))
-            ->add(new ScopeValidator(DummyHTTPAction::getScopes()))   //Override getScopes method in the action to add more scopes to validate
-            ->add(new RequestValidator(DummyHTTPAction::getParams())) //Override getParams method in the action to add more scopes to validate
-            ->setName($this->getServiceName());
+        $app->get("/{number}/dummy", new DummyHTTP($this))
+            //->add(new ScopeValidator(DummyHTTP::getScopes()))   //Override getScopes method in the action to add more scopes to validate
+            //->add(new RequestValidator(DummyHTTP::getParams())) //Override getParams method in the action to add more scopes to validate
+            ->setArgument(APIService::SERVICE_ID, $this->getServiceName())
+            ->setName("DummyRoute");
+    }
+
+    protected function getTemplatePath()
+    {
+        return __DIR__ . "/View";
     }
 }

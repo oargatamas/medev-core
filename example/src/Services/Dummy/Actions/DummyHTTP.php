@@ -9,11 +9,11 @@
 namespace MedevSlimExample\Services\Dummy\Actions;
 
 
-use MedevSlim\Core\Action\Servlet\APIServletAction;
+use MedevSlim\Core\Action\Servlet\APIServlet;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DummyHTTPAction extends APIServletAction
+class DummyHTTP extends APIServlet
 {
 
     /**
@@ -33,7 +33,7 @@ class DummyHTTPAction extends APIServletAction
         $this->error("Error message");
 
 
-        $data = (new DummyRepositoryAction($this->service))->handleRequest($args);
+        $data = ["result" => "nothing"];
 
         return $response->withJson($data,200); //maybe some options needed for the json encode.
     }
