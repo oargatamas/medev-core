@@ -9,6 +9,7 @@
 namespace MedevSlim\Core\Application;
 
 
+use FastRoute\Dispatcher;
 use MedevSlim\Core\Action\Middleware\RequestLogger;
 use MedevSlim\Core\Database\Medoo\MedooDatabase;
 use MedevSlim\Core\ErrorHandlers\ErrorHandlers;
@@ -113,15 +114,15 @@ class MedevApp extends App
         /** @var Router $router */
         $router = $container->get(self::ROUTER);
 
-        $url = $request->getUri()->getPath();
+        $routeInfo = $router->dispatch($request);
 
-        foreach ($router->getRoutes() as $route){
-            if ($route->getPattern() === $url){
-                return $route->getArgument(APIService::SERVICE_ID);
-            }
+        if($routeInfo[0] === Dispatcher::NOT_FOUND){
+            return LogContainer::DEFAULT_LOGGER_CHANNEL;
         }
 
-        return LogContainer::DEFAULT_LOGGER_CHANNEL;
+        $route = $router->lookupRoute($routeInfo[1]);
+
+        return $route->getArgument(APIService::SERVICE_ID,LogContainer::DEFAULT_LOGGER_CHANNEL);
     }
 
     /**

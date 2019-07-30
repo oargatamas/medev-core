@@ -1,6 +1,6 @@
 {
   "name": "medev-core/slim",
-  "description": "Custom core functionality and usage patterns for Slim applications",
+  "description": "Custom core functionality and usage patterns for Slim applications in Medev domain",
   "license": "proprietary",
   "authors": [
     {
