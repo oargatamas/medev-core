@@ -18,14 +18,6 @@ class DummyService extends TwigAPIService
 {
 
     /**
-     * @return string
-     */
-    public function getServiceName()
-    {
-        return "DummyService"; //This needed for creating the correct log file for the service
-    }
-
-    /**
      * @param App $app
      * @throws \Exception
      */

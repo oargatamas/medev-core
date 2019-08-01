@@ -82,7 +82,10 @@ abstract class APIService implements ComponentLogger
     /**
      * @return mixed
      */
-    public abstract function getServiceName();
+    public function getServiceName(){
+        $array = explode('\\', get_class($this));
+        return end($array);
+    }
 
 
 
