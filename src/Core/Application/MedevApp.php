@@ -42,9 +42,10 @@ class MedevApp extends App
      * @param string $pathToConfig
      * @return MedevApp
      */
-    public static function fromJsonFile($pathToConfig){
+    public static function fromJsonFile($pathToConfig)
+    {
         $configJson = file_get_contents($pathToConfig);
-        $config = json_decode($configJson,true);
+        $config = json_decode($configJson, true);
         return new MedevApp($config);
     }
 
@@ -59,11 +60,13 @@ class MedevApp extends App
 
         $instance = $this;
 
-        $container[self::class] = function () use($instance){return $instance;};
+        $container[self::class] = function () use ($instance) {
+            return $instance;
+        };
         LogContainer::inject($container);
         ErrorHandlers::inject($container);
 
-        if(isset($config["database"])){
+        if (isset($config["database"])) {
             MedooDatabase::inject($container);
         }
 
@@ -72,7 +75,6 @@ class MedevApp extends App
 
         $this->requestId = $this->generateRequestUniqueId();
     }
-
 
 
     /**
@@ -91,7 +93,8 @@ class MedevApp extends App
     /**
      * @return string
      */
-    protected function generateRequestUniqueId(){
+    protected function generateRequestUniqueId()
+    {
         return UUID::v4();
     }
 
@@ -99,14 +102,16 @@ class MedevApp extends App
     /**
      * @return array
      */
-    public function getConfiguration(){
+    public function getConfiguration()
+    {
         return $this->getContainer()->get("settings");
     }
 
     /**
      * @return string
      */
-    protected function findRequestChannel(){
+    protected function findRequestChannel()
+    {
         /** @var ContainerInterface $container */
         $container = $this->getContainer();
         /** @var ServerRequestInterface $request */
@@ -116,13 +121,13 @@ class MedevApp extends App
 
         $routeInfo = $router->dispatch($request);
 
-        if($routeInfo[0] === Dispatcher::NOT_FOUND){
-            return LogContainer::DEFAULT_LOGGER_CHANNEL;
+
+        if ($routeInfo[0] === Dispatcher::FOUND) {
+            $route = $router->lookupRoute($routeInfo[1]);
+            return $route->getArgument(APIService::SERVICE_ID, LogContainer::DEFAULT_LOGGER_CHANNEL);
         }
 
-        $route = $router->lookupRoute($routeInfo[1]);
-
-        return $route->getArgument(APIService::SERVICE_ID,LogContainer::DEFAULT_LOGGER_CHANNEL);
+        return LogContainer::DEFAULT_LOGGER_CHANNEL;
     }
 
     /**
@@ -130,14 +135,16 @@ class MedevApp extends App
      * @param APIService $service
      * @throws \Exception
      */
-    public function addAPIService($baseUrl, APIService $service){
+    public function addAPIService($baseUrl, APIService $service)
+    {
         $service->registerService($baseUrl);
     }
 
     /**
      * @return LogContainer
      */
-    public function getLogContainer(){
+    public function getLogContainer()
+    {
         return $this->getContainer()->get(LogContainer::class);
     }
 
