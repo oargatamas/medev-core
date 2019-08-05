@@ -34,6 +34,7 @@ class OriginHandler
         $origins = count($this->allowedOrigins) == 0 ? "*" : implode(",",$this->allowedOrigins);
 
         return $finalResponse
-            ->withHeader("Access-Control-Allow-Origin:",$origins);
+            ->withHeader("Access-Control-Allow-Origin:",$origins)
+            ->withHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, DELETE");
     }
 }
