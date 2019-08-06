@@ -73,7 +73,7 @@ class MedevApp extends App
         }
 
 
-        $this->add(new CORSHandler($config["access_control"]));
+        $this->add(new CORSHandler($this));
         $this->add(new RequestLogger($this));
         $this->add(new IpAddress());
 
