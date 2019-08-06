@@ -31,11 +31,21 @@ class DummyService extends TwigAPIService
         $this->error("Error message");
 
 
-        $app->get("/{number}/dummy", new DummyHTTP($this))
+
+
+        $semmi = $app->get("/dummy", new DummyHTTP($this))
             //->add(new ScopeValidator(DummyHTTP::getScopes()))   //Override getScopes method in the action to add more scopes to validate
             //->add(new RequestValidator(DummyHTTP::getParams())) //Override getParams method in the action to add more scopes to validate
             ->setArgument(APIService::SERVICE_ID, $this->getServiceName())
             ->setName("DummyRoute");
+
+        $semmi = $app->post("/dummy", new DummyHTTP($this))
+            //->add(new ScopeValidator(DummyHTTP::getScopes()))   //Override getScopes method in the action to add more scopes to validate
+            //->add(new RequestValidator(DummyHTTP::getParams())) //Override getParams method in the action to add more scopes to validate
+            ->setArgument(APIService::SERVICE_ID, $this->getServiceName())
+            ->setName("DummyRoute");
+
+
     }
 
     protected function getTemplatePath()

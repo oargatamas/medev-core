@@ -13,11 +13,11 @@ use MedevSlimExample\Services\Dummy\DummyService;
 $configJson = file_get_contents(__DIR__."/../config/config.json");
 $config = json_decode($configJson,true);
 
-$application = new MedevApp($config);
+$application = MedevApp::fromJsonFile(__DIR__."/../config/config.json");
 \MedevSlim\Core\View\TwigView::inject($application->getContainer());
 
-$service = new DummyService($application);
-$service->registerService("/test");
+
+$application->addAPIService("/test",new DummyService($application));
 
 //registering other services or application middlewares....
 

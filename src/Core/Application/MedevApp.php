@@ -10,6 +10,7 @@ namespace MedevSlim\Core\Application;
 
 
 use FastRoute\Dispatcher;
+use MedevSlim\Core\Action\Middleware\CORSHandler;
 use MedevSlim\Core\Action\Middleware\RequestLogger;
 use MedevSlim\Core\Database\Medoo\MedooDatabase;
 use MedevSlim\Core\ErrorHandlers\ErrorHandlers;
@@ -70,6 +71,8 @@ class MedevApp extends App
             MedooDatabase::inject($container);
         }
 
+
+        $this->add(new CORSHandler($config["access_control"]));
         $this->add(new RequestLogger($this));
         $this->add(new IpAddress());
 
