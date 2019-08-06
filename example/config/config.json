@@ -9,7 +9,7 @@
     "charset": "utf8mb4",
     "collation": "utf8mb4_general_ci"
   },
-  "access_control": {
+  "cors": {
     "allowed_origins": [
       "http://localhost:3000"
     ],

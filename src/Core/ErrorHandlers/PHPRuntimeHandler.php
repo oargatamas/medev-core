@@ -15,6 +15,7 @@ use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Route;
 
 /**
  * Class PHPRuntimeHandler
@@ -33,6 +34,11 @@ class PHPRuntimeHandler implements DependencyInjector
     private $logger;
 
     /**
+     * @var array
+     */
+    private $corsConfig;
+
+    /**
      * PHPRuntimeHandler constructor.
      * @param ContainerInterface $container
      */
@@ -40,6 +46,7 @@ class PHPRuntimeHandler implements DependencyInjector
     {
         $this->app = $container->get(MedevApp::class);
         $this->logger = $container->get(LogContainer::class);
+        $this->corsConfig = $this->app->getConfiguration()["cors"];
     }
 
 
@@ -55,9 +62,17 @@ class PHPRuntimeHandler implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,"Error during request handling: ". (string)$exception);
 
-        return $response
+        /** @var Route $route */
+        $route = $request->getAttribute("route");
+        $allowedOrigins = $this->corsConfig["allowed_origins"];
+        $allowedMethods = $route->getMethods();
+        $allowedHeaders = $this->corsConfig["allowed_headers"];
+
+        $response = $response
             ->withStatus(500)
-            ->withJson("Internal Server Error");
+            ->withJson("Internal server error");
+
+        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders);
     }
 
     /**

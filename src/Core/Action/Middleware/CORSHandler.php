@@ -9,21 +9,24 @@
 namespace MedevSlim\Core\Action\Middleware;
 
 
+use MedevSlim\Core\Application\MedevApp;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Route;
 
 class CORSHandler
 {
+    private $app;
     private $config;
 
     /**
      * CORSHandler constructor.
-     * @param $accessControlConfig
+     * @param MedevApp $app
      */
-    public function __construct($accessControlConfig)
+    public function __construct(MedevApp $app)
     {
-        $this->config = $accessControlConfig;
+        $this->app = $app;
+        $this->config = $app->getConfiguration()["cors"];
     }
 
 
@@ -37,11 +40,8 @@ class CORSHandler
 
 
         if ($request->getMethod() === "OPTIONS") {
-            return $response
-                ->withStatus(204)
-                ->withHeader("Access-Control-Allow-Origin", implode(", ", $allowedOrigins))
-                ->withHeader("Access-Control-Allow-Methods", implode(", ", $allowedMethods))
-                ->withHeader("Access-Control-Allow-Headers", implode(", ", $allowedHeaders));
+            return $this->app->mapResponseWithCORS($response,$allowedOrigins,$allowedMethods,$allowedHeaders)
+                ->withStatus(204);
         }
 
         /** @var Response $finalResponse */
@@ -51,9 +51,6 @@ class CORSHandler
         $route = $request->getAttribute("route");
         $allowedMethods = $route->getMethods();
 
-        return $finalResponse
-            ->withHeader("Access-Control-Allow-Origin", implode(", ", $allowedOrigins))
-            ->withHeader("Access-Control-Allow-Methods", implode(", ", $allowedMethods))
-            ->withHeader("Access-Control-Allow-Headers", implode(", ", $allowedHeaders));
+        return $this->app->mapResponseWithCORS($finalResponse,$allowedOrigins,$allowedMethods,$allowedHeaders);
     }
 }

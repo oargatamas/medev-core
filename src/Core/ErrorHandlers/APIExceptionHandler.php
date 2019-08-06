@@ -18,6 +18,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
+use Slim\Route;
 
 /**
  * Class APIExceptionHandler
@@ -37,6 +38,11 @@ class APIExceptionHandler extends Error implements DependencyInjector
     private $app;
 
     /**
+     * @var array
+     */
+    private $corsConfig;
+
+    /**
      * PHPRuntimeHandler constructor.
      * @param ContainerInterface $container
      * @param boolean $displayErrorDetails
@@ -45,6 +51,7 @@ class APIExceptionHandler extends Error implements DependencyInjector
     {
         $this->app = $container->get(MedevApp::class);
         $this->logger = $container->get(LogContainer::class);
+        $this->corsConfig = $this->app->getConfiguration()["cors"];
         parent::__construct($displayErrorDetails);
     }
 
@@ -72,7 +79,15 @@ class APIExceptionHandler extends Error implements DependencyInjector
 
         $response->getBody()->write(json_encode($message));
 
-        return $response
+
+        /** @var Route $route */
+        $route = $request->getAttribute("route");
+        $allowedOrigins = $this->corsConfig["allowed_origins"];
+        $allowedMethods = $route->getMethods();
+        $allowedHeaders = $this->corsConfig["allowed_headers"];
+
+
+        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders)
             ->withStatus($statusCode)
             ->withHeader("Content-type", "application/json");
     }

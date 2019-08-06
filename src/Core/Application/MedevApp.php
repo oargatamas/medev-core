@@ -19,6 +19,7 @@ use MedevSlim\Core\Logging\RequestInfo;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Utils\UUID\UUID;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RKA\Middleware\IpAddress;
 use Slim\App;
@@ -167,4 +168,21 @@ class MedevApp extends App
         return $this->logChannel;
     }
 
+    /**
+     * @param ResponseInterface $response
+     * @param string[] $allowedOrigins
+     * @param string[] $allowedMethods
+     * @param string[] $allowedHeaders
+     * @return ResponseInterface
+     */
+    public function mapResponseWithCORS(ResponseInterface $response, $allowedOrigins = [], $allowedMethods = [], $allowedHeaders = []){
+        $origins = count($allowedOrigins) > 0 ? implode(",",$allowedOrigins) : "*";
+        $methods = implode(",",$allowedMethods);
+        $headers = implode(",",$allowedHeaders);
+
+        return $response
+            ->withHeader("Access-Control-Allow-Origin", $origins)
+            ->withHeader("Access-Control-Allow-Methods", $methods)
+            ->withHeader("Access-Control-Allow-Headers", $headers);
+    }
 }
