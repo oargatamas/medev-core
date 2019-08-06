@@ -52,7 +52,7 @@ class CORSHandler
         $allowedMethods = $route->getMethods();
 
         return $finalResponse
-            ->withHeader("Access-Control-Allow-Origin:", implode(", ", $allowedOrigins))
+            ->withHeader("Access-Control-Allow-Origin", implode(", ", $allowedOrigins))
             ->withHeader("Access-Control-Allow-Methods", implode(", ", $allowedMethods))
             ->withHeader("Access-Control-Allow-Headers", implode(", ", $allowedHeaders));
     }
