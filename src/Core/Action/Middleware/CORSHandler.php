@@ -39,7 +39,7 @@ class CORSHandler
         if ($request->getMethod() === "OPTIONS") {
             return $response
                 ->withStatus(204)
-                ->withHeader("Access-Control-Allow-Origin:", implode(", ", $allowedOrigins))
+                ->withHeader("Access-Control-Allow-Origin", implode(", ", $allowedOrigins))
                 ->withHeader("Access-Control-Allow-Methods", implode(", ", $allowedMethods))
                 ->withHeader("Access-Control-Allow-Headers", implode(", ", $allowedHeaders));
         }
