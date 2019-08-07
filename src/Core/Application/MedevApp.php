@@ -183,6 +183,7 @@ class MedevApp extends App
         return $response
             ->withHeader("Access-Control-Allow-Origin", $origins)
             ->withHeader("Access-Control-Allow-Methods", $methods)
-            ->withHeader("Access-Control-Allow-Headers", $headers);
+            ->withHeader("Access-Control-Allow-Headers", $headers)
+            ->withHeader("Access-Control-Allow-Credentials","true");
     }
 }
