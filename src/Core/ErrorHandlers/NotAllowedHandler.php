@@ -15,7 +15,6 @@ use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Slim\Route;
 
 /**
  * Class NotAllowedHandler
@@ -62,10 +61,10 @@ class NotAllowedHandler implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,$request->getMethod()." method not allowed. Allowed method(s): ". implode(", ",$methods));
 
-        /** @var Route $route */
-        $route = $request->getAttribute("route");
+        /** @var array $route */
+        $route = $request->getAttribute("routeInfo");
         $allowedOrigins = $this->corsConfig["allowed_origins"];
-        $allowedMethods = $route->getMethods();
+        $allowedMethods = $route[1];
         $allowedHeaders = $this->corsConfig["allowed_headers"];
 
         $response = $response
