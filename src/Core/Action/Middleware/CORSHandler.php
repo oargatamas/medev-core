@@ -9,7 +9,9 @@
 namespace MedevSlim\Core\Action\Middleware;
 
 
+use FastRoute\Dispatcher;
 use MedevSlim\Core\Application\MedevApp;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Route;
@@ -32,25 +34,35 @@ class CORSHandler
 
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $routeInfo = $request->getAttribute("routeInfo");
-
         $allowedOrigins = $this->config["allowed_origins"];
-        $allowedMethods = $routeInfo[1];
+        $allowedMethods = self::getAllowedMethods($request);
         $allowedHeaders = $this->config["allowed_headers"];
 
 
         if ($request->getMethod() === "OPTIONS") {
-            return $this->app->mapResponseWithCORS($response,$allowedOrigins,$allowedMethods,$allowedHeaders)
+            return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders)
                 ->withStatus(204);
         }
 
         /** @var Response $finalResponse */
         $finalResponse = $next($request, $response);
 
+        return $this->app->mapResponseWithCORS($finalResponse, $allowedOrigins, $allowedMethods, $allowedHeaders);
+    }
+
+    public static function getAllowedMethods(ServerRequestInterface $request)
+    {
+        $routeInfo = $request->getAttribute("routeInfo");
         /** @var Route $route */
         $route = $request->getAttribute("route");
-        $allowedMethods = $route->getMethods();
 
-        return $this->app->mapResponseWithCORS($finalResponse,$allowedOrigins,$allowedMethods,$allowedHeaders);
+        switch ($routeInfo[0]) {
+            case Dispatcher::FOUND:
+                return $route->getMethods();
+            case Dispatcher::METHOD_NOT_ALLOWED:
+                return $routeInfo[1];
+            default :
+                return [];
+        }
     }
 }

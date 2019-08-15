@@ -10,6 +10,7 @@ namespace MedevSlim\Core\ErrorHandlers;
 
 
 
+use MedevSlim\Core\Action\Middleware\CORSHandler;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
@@ -18,7 +19,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
-use Slim\Route;
 
 /**
  * Class APIExceptionHandler
@@ -80,10 +80,8 @@ class APIExceptionHandler extends Error implements DependencyInjector
         $response->getBody()->write(json_encode($message));
 
 
-        /** @var Route $route */
-        $route = $request->getAttribute("route");
         $allowedOrigins = $this->corsConfig["allowed_origins"];
-        $allowedMethods = $route->getMethods();
+        $allowedMethods = CORSHandler::getAllowedMethods($request);
         $allowedHeaders = $this->corsConfig["allowed_headers"];
 
 

@@ -9,13 +9,13 @@
 namespace MedevSlim\Core\ErrorHandlers;
 
 
+use MedevSlim\Core\Action\Middleware\CORSHandler;
 use MedevSlim\Core\Application\MedevApp;
 use MedevSlim\Core\DependencyInjection\DependencyInjector;
 use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Slim\Route;
 
 /**
  * Class PHPRuntimeHandler
@@ -62,10 +62,8 @@ class PHPRuntimeHandler implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,"Error during request handling: ". (string)$exception);
 
-        /** @var Route $route */
-        $route = $request->getAttribute("route");
         $allowedOrigins = $this->corsConfig["allowed_origins"];
-        $allowedMethods = $route->getMethods();
+        $allowedMethods = CORSHandler::getAllowedMethods($request);
         $allowedHeaders = $this->corsConfig["allowed_headers"];
 
         $response = $response

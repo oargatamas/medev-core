@@ -15,7 +15,6 @@ use MedevSlim\Core\Logging\LogContainer;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Slim\Route;
 
 /**
  * Class NotFoundHandler
@@ -61,17 +60,9 @@ class NotFoundHandler implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,"Route not found: " .$request->getUri()->__toString());
 
-        /** @var Route $route */
-        $route = $request->getAttribute("route");
-        $allowedOrigins = $this->corsConfig["allowed_origins"];
-        $allowedMethods = $route->getMethods();
-        $allowedHeaders = $this->corsConfig["allowed_headers"];
-
-        $response = $response
+        return $response
             ->withStatus(404)
             ->withJson("Content not found");
-
-        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders);
     }
 
     /**

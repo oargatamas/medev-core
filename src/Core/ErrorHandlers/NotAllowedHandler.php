@@ -61,17 +61,9 @@ class NotAllowedHandler implements DependencyInjector
 
         $this->logger->error($channel,$uniqueId,$request->getMethod()." method not allowed. Allowed method(s): ". implode(", ",$methods));
 
-        /** @var array $route */
-        $route = $request->getAttribute("routeInfo");
-        $allowedOrigins = $this->corsConfig["allowed_origins"];
-        $allowedMethods = $route[1];
-        $allowedHeaders = $this->corsConfig["allowed_headers"];
-
-        $response = $response
+        return $response
             ->withStatus(405)
             ->withJson("Method not allowed");
-
-        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders);
     }
 
     /**
