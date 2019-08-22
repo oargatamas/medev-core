@@ -19,6 +19,7 @@ use MedevSlim\Core\Logging\RequestInfo;
 use MedevSlim\Core\Service\APIService;
 use MedevSlim\Utils\UUID\UUID;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RKA\Middleware\IpAddress;
@@ -169,6 +170,7 @@ class MedevApp extends App
     }
 
     /**
+     * @param RequestInterface $request
      * @param ResponseInterface $response
      * @param string[] $allowedOrigins
      * @param string[] $allowedMethods
@@ -178,7 +180,8 @@ class MedevApp extends App
     public function mapResponseWithCORS(ResponseInterface $response, $allowedOrigins = [], $allowedMethods = [], $allowedHeaders = []){
 
         if(count($allowedOrigins) > 0) {
-            $origin = implode("|",$allowedOrigins);
+            $requestOrigin = $_SERVER["HTTP_ORIGIN"] ?? "";
+            $origin = in_array($requestOrigin, $allowedOrigins)? $requestOrigin : "";
         } else{
             $origin = "*";
         }
@@ -187,7 +190,6 @@ class MedevApp extends App
 
         return $response
             ->withHeader("Access-Control-Allow-Origin", $origin)
-            ->withHeader("Vary", "Origin")
             ->withHeader("Access-Control-Allow-Methods", $methods)
             ->withHeader("Access-Control-Allow-Headers", $headers)
             ->withHeader("Access-Control-Allow-Credentials","true");
