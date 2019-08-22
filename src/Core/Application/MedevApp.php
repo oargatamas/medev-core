@@ -178,7 +178,7 @@ class MedevApp extends App
     public function mapResponseWithCORS(ResponseInterface $response, $allowedOrigins = [], $allowedMethods = [], $allowedHeaders = []){
 
         if(count($allowedOrigins) > 0) {
-            $requestOrigin = $_SERVER["HTTP_ORIGIN"];
+            $requestOrigin = $_SERVER["HTTP_ORIGIN"] ?? "";
             $origin = in_array($requestOrigin, $allowedOrigins)? $requestOrigin : "";
         } else{
             $origin = "*";
