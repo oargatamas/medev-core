@@ -85,7 +85,7 @@ class APIExceptionHandler extends Error implements DependencyInjector
         $allowedHeaders = $this->corsConfig["allowed_headers"];
 
 
-        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders)
+        return $this->app->mapResponseWithCORS($request, $response, $allowedOrigins, $allowedMethods, $allowedHeaders)
             ->withStatus($statusCode)
             ->withHeader("Content-type", "application/json");
     }

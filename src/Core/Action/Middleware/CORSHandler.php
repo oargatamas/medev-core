@@ -40,14 +40,14 @@ class CORSHandler
 
 
         if ($request->getMethod() === "OPTIONS") {
-            return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders)
+            return $this->app->mapResponseWithCORS($request, $response, $allowedOrigins, $allowedMethods, $allowedHeaders)
                 ->withStatus(204);
         }
 
         /** @var Response $finalResponse */
         $finalResponse = $next($request, $response);
 
-        return $this->app->mapResponseWithCORS($finalResponse, $allowedOrigins, $allowedMethods, $allowedHeaders);
+        return $this->app->mapResponseWithCORS($request, $finalResponse, $allowedOrigins, $allowedMethods, $allowedHeaders);
     }
 
     public static function getAllowedMethods(ServerRequestInterface $request)

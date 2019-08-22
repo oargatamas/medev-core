@@ -70,7 +70,7 @@ class PHPRuntimeHandler implements DependencyInjector
             ->withStatus(500)
             ->withJson("Internal server error");
 
-        return $this->app->mapResponseWithCORS($response, $allowedOrigins, $allowedMethods, $allowedHeaders);
+        return $this->app->mapResponseWithCORS($request, $response, $allowedOrigins, $allowedMethods, $allowedHeaders);
     }
 
     /**
