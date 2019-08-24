@@ -60,7 +60,7 @@ class RequestLogger
             RequestAttribute::INITIATOR => $request->getAttribute(RequestAttribute::IP_ADDRESS),
             RequestAttribute::METHOD => $request->getMethod(),
             RequestAttribute::URI => (string)$request->getUri(),
-            RequestAttribute::REQUEST_PARAMS => "(".implode(";",$request->getParams()).")",
+            RequestAttribute::REQUEST_PARAMS => json_encode($request->getParams()),
         ];
 
 
