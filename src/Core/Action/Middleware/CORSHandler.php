@@ -10,33 +10,22 @@ namespace MedevSlim\Core\Action\Middleware;
 
 
 use FastRoute\Dispatcher;
-use MedevSlim\Core\Application\MedevApp;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Route;
 
-class CORSHandler
+class CORSHandler extends AppMiddleware
 {
-    private $app;
-    private $config;
-
-    /**
-     * CORSHandler constructor.
-     * @param MedevApp $app
-     */
-    public function __construct(MedevApp $app)
-    {
-        $this->app = $app;
-        $this->config = $app->getConfiguration()["cors"];
-    }
 
 
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $allowedOrigins = $this->config["allowed_origins"];
+        $corsConfig = $this->config["cors"];
+
+        $allowedOrigins = $corsConfig["allowed_origins"];
         $allowedMethods = self::getAllowedMethods($request);
-        $allowedHeaders = $this->config["allowed_headers"];
+        $allowedHeaders = $corsConfig["allowed_headers"];
 
 
         if ($request->getMethod() === "OPTIONS") {
