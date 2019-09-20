@@ -10,8 +10,6 @@ namespace MedevSlim\Core\Action\Middleware;
 
 
 use MedevSlim\Core\Action\RequestAttribute;
-use MedevSlim\Core\Application\MedevApp;
-use MedevSlim\Core\Logging\LogContainer;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -19,29 +17,8 @@ use Slim\Http\Response;
  * Class RequestLogger
  * @package MedevSlim\Core\Action\Middleware
  */
-class RequestLogger
+class RequestLogger extends AppMiddleware
 {
-
-    /**
-     * @var MedevApp
-     */
-    private $app;
-
-    /**
-     * @var LogContainer
-     */
-    private $logger;
-
-
-    /**
-     * RequestLogger constructor.
-     * @param MedevApp $app
-     */
-    public function __construct(MedevApp $app)
-    {
-        $this->app = $app;
-        $this->logger = $app->getLogContainer();
-    }
 
 
     /**
