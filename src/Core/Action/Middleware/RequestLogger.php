@@ -46,10 +46,16 @@ class RequestLogger extends AppMiddleware
         /** @var Response $finalResponse */
         $finalResponse = $next($request->withAttribute(RequestAttribute::CORRELATION_ID, $uniqueId), $response);
 
+
         $outgoingLogData = [
-            RequestAttribute::RESPONSE_DATA => $finalResponse->__toString()
+            RequestAttribute::RESPONSE_HEADERS => $finalResponse->getHeaders(),
         ];
-        $this->logger->info($channel, $uniqueId,"Outbound response data: ". implode(", ",$outgoingLogData));
+
+        if(!in_array("application/octet-stream",$finalResponse->getHeader("Content-Type"))){
+            $outgoingLogData[ RequestAttribute::RESPONSE_BODY] = $finalResponse->getBody();
+        }
+
+        $this->logger->info($channel, $uniqueId,"Outbound response data: ". json_encode($outgoingLogData));
 
         return $finalResponse;
     }

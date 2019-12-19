@@ -14,9 +14,10 @@ class RequestAttribute
     const IP_ADDRESS = "ip_address";
     const SCOPES = "Scopes";
     const CORRELATION_ID = "CorrelationId";
-    const RESPONSE_DATA = "ResponseData";
     const INITIATOR = "Initiator";
     const URI = "URI";
     const METHOD = "Method";
     const REQUEST_PARAMS = "Params";
+    const RESPONSE_HEADERS = "ResponseHeaders";
+    const RESPONSE_BODY = "ResponseBody";
 }
