@@ -12,11 +12,13 @@
     "php": ">=7.1.0",
     "slim/slim": "^3.10",
     "catfan/medoo": "^1.5",
-    "ext-json": "^1.6",
+    "ext-json": "*",
     "monolog/monolog": "^1.23",
     "akrabat/ip-address-middleware": "^1.0",
     "slim/twig-view": "^2.4",
-    "curl/curl": "^2.2"
+    "curl/curl": "^2.2",
+    "guzzlehttp/guzzle": "7.0",
+    "ext-intl": "*"
   },
   "autoload": {
     "psr-4": {
